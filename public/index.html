@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html ng-app="lanParty" ng-cloak lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Lan Party</title>
+	<link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body ng-controller="mainController as main">
+	<header>
+		<h1>Lan Party</h1>
+		<h3>{{main.loggedin}}</h3>
+	</header>
+	
+	<!-- sign up -->
+	<div>
+		<label>Name:</label> <input ng-model="main.name" type="text" placeholder='Vinnilla' autofocus>
+		<button ng-click="main.join()">Join</button>
+	</div>
+
+	<!-- socket -->
+	<script src="/socket.io/socket.io.js"></script>
+	<!-- angular -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<!-- main js -->
+	<script src="/javascripts/angular.js"></script>
+	<!-- controllers -->
+	<script src="/javascripts/app.js"></script>
+
+</body>
+</html>
