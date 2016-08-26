@@ -1,0 +1,5 @@
+<!-- sign up -->
+<div ng-if="!user.loggedin" class="form">
+	<label>Name:</label> <input ng-model="user.name" type="text" placeholder='Vinnilla' autofocus>
+	<button ng-click="user.join()">Join</button>
+</div>

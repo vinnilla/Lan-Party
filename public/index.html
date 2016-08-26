@@ -7,22 +7,23 @@
 </head>
 <body ng-controller="mainController as main">
 	<header>
-		<h1>Lan Party</h1>
-		<h3>{{main.loggedin}}</h3>
+		<h1 class="header" id="logo">Lan Party</h1>
+		<h3 ng-if="main.userData.isLoggedIn()" class="right header">{{main.userData.getName()}}</h3>
 	</header>
 	
-	<!-- sign up -->
-	<div>
-		<label>Name:</label> <input ng-model="main.name" type="text" placeholder='Vinnilla' autofocus>
-		<button ng-click="main.join()">Join</button>
-	</div>
+	<div ui-view></div>
+	
 
 	<!-- socket -->
 	<script src="/socket.io/socket.io.js"></script>
 	<!-- angular -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<!-- ui-router -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.min.js"></script>
 	<!-- main js -->
 	<script src="/javascripts/angular.js"></script>
+	<!-- factories -->
+	<script src="/javascripts/factories/user.js"></script>
 	<!-- controllers -->
 	<script src="/javascripts/app.js"></script>
 

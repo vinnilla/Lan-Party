@@ -4,11 +4,44 @@
 
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: black;
+  background-color: rgba(0,0,0,0.9);
   color: white;
   height: 100%;
 }
 
 a {
   color: #00B7FF;
+}
+
+/*header*/
+header{
+	margin: 0 5% 5% 5%;
+	border-bottom: 2px solid rgba(255,255,255,0.7);
+}
+#logo, .right{
+	width:49%;
+}
+.header{
+	display: inline-block;
+}
+.right {
+	text-align: right;
+}
+
+/*forms*/
+.form{
+	background-color: rgba(255,255,255,0.15);
+	text-align: center;
+	width: 50%;
+	border: 2px rgba(255,255,255,0.5) solid;
+	margin: 0 auto;
+	padding: 5%;
+}
+input, button{
+	background-color: rgba(0,0,0,0);
+	border: none;
+	color: white;
+}
+input {
+	border: solid rgba(0,0,0,0) 5px;
 }
