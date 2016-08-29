@@ -45,3 +45,6 @@ input, button{
 input {
 	border: solid rgba(0,0,0,0) 5px;
 }
+label {
+	text-align: left;
+}
