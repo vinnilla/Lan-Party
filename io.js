@@ -16,7 +16,7 @@ io.on('connection', function(socket) {
 	socket.on('disconnect', function() {
 		players = players.filter(function(player) {
 			// remove disconnected player from array
-			if(player.id != socket.id) {
+			if(player.socket != socket.id) {
 				return player;
 			}
 		})// end of filter

@@ -50,8 +50,6 @@ function login(req, res) {
 		return false;
 	}
 
-	// decrypt password
-
 	User.findOne({name: name}, function(err, user) {
 		if (err) {
 			res.json(err);
@@ -61,14 +59,26 @@ function login(req, res) {
 			res.json({error: "User cannot be found"});
 			return false;
 		}
-		// update user with new socket
-		user.socket = socket;
-		user.save(function(err, user) {
-			if(err) {
+		// decrypt password and compare
+		bcrypt.compare(password, user.password_hash, function(err, result) {
+			if (err) {
 				res.json(err);
 				return false;
 			}
-			res.json(user);
+			if (!result) {
+				res.json({error: "Invalid password"});
+				return false;
+			}
+			// update user with new socket
+			user.socket = socket;
+			user.save(function(err, user) {
+				if(err) {
+					res.json(err);
+					return false;
+				}
+				res.json({user: user, token: createToken(user)});
+			})
+			
 		})
 	})
 }
@@ -109,7 +119,7 @@ function register(req, res) {
 					return false;
 				}
 				//everything worked, send back token
-				res.json({token: createToken(user)})
+				res.json({user: user, token: createToken(user)})
 
 			})
 		})

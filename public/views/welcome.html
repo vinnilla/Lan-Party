@@ -1,5 +1,5 @@
 <!-- sign up -->
-<div ng-if="!user.loggedin" class="form">
+<div ng-if="user.userData.forceGame()" class="form">
 
 	<button ui-sref="register">Register</button>
 	<button ui-sref="login">Login</button>

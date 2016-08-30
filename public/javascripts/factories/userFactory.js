@@ -33,7 +33,7 @@
 				password: factory.password,
 				socket: factory.socket})
 			.then(function(response) {
-				addPlayer(response.data);
+				addPlayer(response.data.user, response.data.token);
 			})
 		}
 
@@ -43,8 +43,25 @@
 				password: factory.password,
 				socket: factory.socket})
 			.then(function(response) {
-				addPlayer(response.data);
+				addPlayer(response.data.user, response.data.token);
 			})
+		}
+
+		// force states depending on logged in status
+		factory.forceGame = function() {
+			if(factory.user) {
+				$state.transitionTo('game');
+				return false;
+			}
+			return true;
+		}
+
+		factory.forceWelcome = function() {
+			if (!factory.user) {
+				$state.transitionTo('welcome');
+				return false;
+			}
+			return true;
 		}
 
 		factory.isLoggedIn = function() {
@@ -60,8 +77,10 @@
 			return factory.name;
 		}
 
-		function addPlayer(player) {
-			socket.emit('add-player', {name:player.name, socket: player.socket, class: player.class, exp: player.experience})
+		function addPlayer(player,token) {
+			// keep user data in factory
+			factory.user = player;
+			socket.emit('add-player', {name:player.name, socket: player.socket, class: player.class, exp: player.experience, token: token})
 			// switch to game state
 			$state.transitionTo('game')
 		}
