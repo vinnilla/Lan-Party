@@ -9,6 +9,7 @@ router.post('/register', userController.register);
 
 router.get('/users', userController.index)
 router.post('/users', userController.newUser);
-router.get('/users/:id', userController.profile);
+router.get('/user', userController.verifyToken, userController.profile);
+router.delete('/users', userController.remove);
 
 module.exports = router;

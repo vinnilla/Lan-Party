@@ -4,12 +4,12 @@ var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 
 function index(req, res) {
-	User.find({}, function(err,user) {
+	User.find({}, function(err,users) {
 		if (err) {
 			res.json(err);
 		}
 		else {
-			res.json(user);
+			res.json(users);
 		}
 	})
 }
@@ -29,8 +29,19 @@ function create(req,res) {
 	})
 }
 
+function remove(req, res) {
+	User.findOneAndRemove({name: req.body.name}, function(err, result) {
+		if(err) {
+			res.json(err);
+		}
+		else {
+			res.json({msg:"user deleted"});
+		}
+	})
+}
+
 function profile(req, res) {
-	User.findById({}, function(err, user) {
+	User.findOne({id: req.token._id}, function(err, user) {
 		if (err) {
 			res.json(err);
 		}
@@ -126,8 +137,19 @@ function register(req, res) {
 	})
 }
 
+function verify(req, res, next) {
+	jwt.verify(req.query.token, process.env.JWT_SECRET, function(err, decoded) {
+		if (err) {
+			res.json(err);
+			return false;
+		}
+		req.token = decoded;
+		next();
+	})
+}
+
 function createToken(user) {
-	return jwt.sign(user, process.env.JWT_SECRET);
+	return jwt.sign(user._id, process.env.JWT_SECRET);
 }
 
 module.exports = {
@@ -135,5 +157,7 @@ module.exports = {
 	newUser: create,
 	profile: profile,
 	login: login,
-	register: register
+	register: register,
+	remove: remove,
+	verifyToken: verify
 }

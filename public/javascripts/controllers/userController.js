@@ -22,12 +22,11 @@
 		this.name; // updated dynamically with name input field
 		this.password;
 		this.conpassword;
-		this.loggedin; // updated with join()
 
 		this.register = function() {
 			// check if passwords match
 			if(self.password === self.conpassword) {
-				// send data to factory/backend
+				// send data to factory
 				userData.name = self.name;
 				userData.password = self.password;
 				// factory function that talks to backend
@@ -39,12 +38,12 @@
 		}
 
 		this.login = function () {
-			userData.name = self.name; // send name to factory
+			// send data to factory
+			userData.name = self.name;
 			userData.password = self.password;
 			// factory function that talks to backend
-			userData.login();
-			self.loggedin = userData.isLoggedIn(); // pull boolean for login status
-			console.info('joined');
+			self.error = userData.login();
+
 		}// end of join function
 
 	}// end of userController
@@ -52,7 +51,20 @@
 	function gameController(userData) {
 		var self = this;
 		this.userData = userData;
+		this.name = userData.getName();
 	}// end of gameController
 
+
+	// function UserController($http) {
+	// 	var self = this;
+
+	// 	$http({
+	// 		url: '/user',
+	// 		method: 'get',
+	// 		params: {
+
+	// 		}
+	// 	})
+	// }
 
 })();

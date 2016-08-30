@@ -8,9 +8,10 @@
 
 	function main($http, $state) {
 		var factory = {};
-
 		// connect to socket
 		var socket = io();
+
+		factory.login
 
 		socket.on('get-socket', function(data) {
 			factory.socket = data.socket;
@@ -33,7 +34,14 @@
 				password: factory.password,
 				socket: factory.socket})
 			.then(function(response) {
-				addPlayer(response.data.user, response.data.token);
+				if(response.data.error) {
+					factory.error = response.data.error;
+				}
+				else {
+					factory.error = undefined;
+					localStorage.token = response.data.token;
+					addPlayer(response.data.user, response.data.token);
+				}
 			})
 		}
 
@@ -43,7 +51,14 @@
 				password: factory.password,
 				socket: factory.socket})
 			.then(function(response) {
-				addPlayer(response.data.user, response.data.token);
+				if(response.data.error) {
+					factory.error = response.data.error;
+				}
+				else {
+					factory.error = undefined;
+					localStorage.token = response.data.token;
+					addPlayer(response.data.user, response.data.token);
+				}
 			})
 		}
 
@@ -74,7 +89,13 @@
 		}
 
 		factory.getName = function() {
-			return factory.name;
+			if(!factory.error) {
+				return factory.name;
+			}
+		}
+
+		factory.getError = function() {
+			return factory.error;
 		}
 
 		function addPlayer(player,token) {
