@@ -6,6 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
+// Load environment variables
+require('dotenv').load();
+
 // connect to mongoDB;
 mongoose.connect('mongodb://localhost/lanParty');
 

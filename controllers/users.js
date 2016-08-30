@@ -1,5 +1,7 @@
 // require user model
 var User = require('../models/users');
+var bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
 
 function index(req, res) {
 	User.find({}, function(err,user) {
@@ -38,8 +40,90 @@ function profile(req, res) {
 	});
 }
 
+function login(req, res) {
+	var name = req.body.name;
+	var password = req.body.password;
+	var socket = req.body.socket;
+
+	if (!name || !password) {
+		res.json({error: "Name and password must be set"})
+		return false;
+	}
+
+	// decrypt password
+
+	User.findOne({name: name}, function(err, user) {
+		if (err) {
+			res.json(err);
+			return false;
+		}
+		if (!user) {
+			res.json({error: "User cannot be found"});
+			return false;
+		}
+		// update user with new socket
+		user.socket = socket;
+		user.save(function(err, user) {
+			if(err) {
+				res.json(err);
+				return false;
+			}
+			res.json(user);
+		})
+	})
+}
+
+function register(req, res) {
+	var name = req.body.name;
+	var password = req.body.password;
+	var socket = req.body.socket;
+
+	if (!name || !password) {
+		res.json({error: "Name and password must be set"})
+		return false;
+	}
+
+	// verify username has not been taken
+	User.findOne({name: name}, function(err, user) {
+		if (err) {
+			res.json(err);
+			return false;
+		}
+		if (user) {
+			res.json({error: "Name has already been taken"});
+			return false;
+		}
+		// create new user
+		bcrypt.hash(password, 10, function(err, hash) {
+			if (err) {
+				res.json(err);
+				return false;
+			}
+			var user = new User();
+			user.name = name;
+			user.socket = socket;
+			user.password_hash = hash;
+			user.save(function(err, user) {
+				if(err) {
+					res.json(err);
+					return false;
+				}
+				//everything worked, send back token
+				res.json({token: createToken(user)})
+
+			})
+		})
+	})
+}
+
+function createToken(user) {
+	return jwt.sign(user, process.env.JWT_SECRET);
+}
+
 module.exports = {
 	index: index,
 	newUser: create,
-	profile: profile
+	profile: profile,
+	login: login,
+	register: register
 }

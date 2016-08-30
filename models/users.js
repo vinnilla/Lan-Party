@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 
 var userSchema = new mongoose.Schema({
 	name:String,
+	password_hash:String,
 	socket:String,
 	experience:{type: Number, default: 0},
 	class:{type: String, default: null},

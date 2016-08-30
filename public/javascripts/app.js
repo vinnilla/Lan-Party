@@ -21,11 +21,16 @@
 					controller: 'userController as user',
 					templateUrl: 'views/login.html'
 				})
-				.state('user', {
-					url: '/user',
-					controller: 'userController as user',
-					templateUrl: 'views/user.html'
+				.state('game', {
+					url: '/game',
+					controller: 'gameController as game',
+					templateUrl: 'views/game.html'
 				})
+				// .state('user', {
+				// 	url: '/user',
+				// 	controller: 'userController as user',
+				// 	templateUrl: 'views/user.html'
+				// })
 		})// end of config
 
 })();

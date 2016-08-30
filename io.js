@@ -1,14 +1,12 @@
-var  io = require('socket.io')();
+var io = require('socket.io')();
 var players = [];
 
 io.on('connection', function(socket) {
 	console.log(socket.id);
+	socket.emit('get-socket', {socket: socket.id})
+
 
 	socket.on('add-player', function(data) {
-		data.id = socket.id;
-		//TODO talk to backend
-			// update id
-			// pull user data from database
 		players.push(data);
 		console.info(`On connect: `);
 		console.info(players);
