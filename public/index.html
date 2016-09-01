@@ -3,11 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Lan Party</title>
+	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+	<link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.6.3/font-awesome.min.css ">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body ng-controller="mainController as main">
-	<header>
+	<header id="main-header">
 		<h1 class="header" id="logo">Lan Party</h1>
 		<h3 ng-if="main.userData.isLoggedIn()" class="right header">{{main.userData.getName()}}</h3>
 	</header>

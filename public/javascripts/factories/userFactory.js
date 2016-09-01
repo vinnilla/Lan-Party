@@ -13,6 +13,9 @@
 
 		factory.login
 
+		factory.name;
+		factory.password;
+
 		socket.on('get-socket', function(data) {
 			factory.socket = data.socket;
 			console.info(factory.socket);
@@ -62,23 +65,6 @@
 			})
 		}
 
-		// force states depending on logged in status
-		factory.forceGame = function() {
-			if(factory.user) {
-				$state.transitionTo('game');
-				return false;
-			}
-			return true;
-		}
-
-		factory.forceWelcome = function() {
-			if (!factory.user) {
-				$state.transitionTo('welcome');
-				return false;
-			}
-			return true;
-		}
-
 		factory.isLoggedIn = function() {
 			if (factory.name) {
 				return true;
@@ -103,7 +89,7 @@
 			factory.user = player;
 			socket.emit('add-player', {name:player.name, socket: player.socket, class: player.class, exp: player.experience, token: token})
 			// switch to game state
-			$state.transitionTo('game')
+			$state.transitionTo('game.home')
 		}
 
 		return factory;

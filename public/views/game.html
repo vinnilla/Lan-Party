@@ -1,7 +1,9 @@
-<div id="game-container" ng-if="game.userData.forceWelcome()">
+<div id="game-container">
 	<div id="game">
-		<header id="game-nav">
-			
+		<header id="top-buttons">
+			<i id="settings" class="fa fa-cog" aria-hidden="true"></i>
+			<i id="sound" class="fa fa-volume-off" aria-hidden="true"></i>	
 		</header>
+		<div ui-view id="game-content"></div>
 	</div>
 </div>

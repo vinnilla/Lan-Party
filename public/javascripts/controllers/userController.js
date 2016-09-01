@@ -51,7 +51,7 @@
 	function gameController(userData) {
 		var self = this;
 		this.userData = userData;
-		this.name = userData.getName();
+		this.player = userData.user;
 	}// end of gameController
 
 

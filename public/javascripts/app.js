@@ -1,6 +1,9 @@
 (function() {
 	'use strict';
 
+	// remove token on page load because socket id changes
+	localStorage.removeItem('token');
+
 	angular.module('lanParty', ['ui.router'])
 		.config(function($stateProvider, $urlRouterProvider){
 			$urlRouterProvider.otherwise('/welcome');
@@ -38,35 +41,46 @@
 						requireLogin: true
 					}
 				})
-				// .state('user', {
-				// 	url: '/user',
-				// 	controller: 'userController as user',
-				// 	templateUrl: 'views/user.html'
-				// })
+				.state('game.home', {
+					url: '/home',
+					controller: 'gameController as game',
+					templateUrl: 'views/game.home.html',
+					data: {
+						requireLogin: true
+					}
+				})
+				.state('game.solo', {
+					url: '/solo',
+					controller: 'gameController as game',
+					templateUrl: 'views/game.solo.html',
+					data: {
+						requireLogin: true
+					}
+				})
 		})// end of config
-		// .run(function($rootScope, $state){
-		// 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
+		.run(function($rootScope, $state){
+			$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
 
-		// 		// case 1: access requireLogin page without token
-		// 		if(toState.data.requireLogin && !localStorage.token) {
-		// 			event.preventDefault();
-		// 			$state.go('login');
-		// 		}
+				// case 1: access requireLogin page without token
+				if(toState.data.requireLogin && !localStorage.token) {
+					event.preventDefault();
+					$state.go('welcome');
+				}
 
-		// 		// case 2: access requireLogout page with token
-		// 		else if (toState.data.requireLogout && localStorage.token) {
-		// 			event.preventDefault();
-		// 			$state.transitionTo('game');
-		// 		}
+				// case 2: access requireLogout page with token
+				else if (toState.data.requireLogout && localStorage.token) {
+					event.preventDefault();
+					$state.transitionTo('game.home');
+				}
+
+				// case 3: someone is trying to login with a fake token
+				// ignore this case
+
+
+					// var payloadb64 = localStorage.token.split('.')[1];
+					// var payload = JSON.parse(atob(payloadb64));
 				
-		// 		// case 3: someone is trying to login with a fake token
-		// 		// ignore this case
-
-
-		// 			// var payloadb64 = localStorage.token.split('.')[1];
-		// 			// var payload = JSON.parse(atob(payloadb64));
-				
-		// 	})// end of $on
-		// })// end of run 
+			})// end of $on
+		})// end of run 
 
 })();
