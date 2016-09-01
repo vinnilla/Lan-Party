@@ -57,6 +57,14 @@
 						requireLogin: true
 					}
 				})
+				.state('game.group', {
+					url: '/group',
+					controller: 'gameController as game',
+					templateUrl: 'views/game.group.html',
+					data: {
+						requireLogin: true
+					}
+				})
 		})// end of config
 		.run(function($rootScope, $state){
 			$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {

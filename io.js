@@ -12,6 +12,11 @@ io.on('connection', function(socket) {
 		console.info(players);
 	})
 
+	socket.on('join-room', function(data) {
+		socket.join(data.name);
+		console.info(`${socket.id} has joined ${data.name}`);
+		io.to(data.name).emit('connect-room', {user: data.name});
+	})
 
 	socket.on('disconnect', function() {
 		players = players.filter(function(player) {

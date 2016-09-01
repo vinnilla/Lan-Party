@@ -21,6 +21,10 @@
 			console.info(factory.socket);
 		})
 
+		socket.on('connect-room', function(data) {
+			console.info(data.user);
+		})
+
 		factory.userDatabase = function() {
 			//retrieve user array from database
 			$http.get('/api/users')
@@ -82,6 +86,11 @@
 
 		factory.getError = function() {
 			return factory.error;
+		}
+
+		factory.joinRoom = function(name) {
+			console.log(name);
+			socket.emit('join-room', {name: name, socket: factory.socket});
 		}
 
 		function addPlayer(player,token) {

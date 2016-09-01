@@ -52,6 +52,12 @@
 		var self = this;
 		this.userData = userData;
 		this.player = userData.user;
+		this.room;
+
+		this.joinRoom = function() {
+			userData.joinRoom(self.room);
+
+		}
 	}// end of gameController
 
 
