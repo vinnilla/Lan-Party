@@ -15,11 +15,12 @@ Once registered/logged in, the users are sent to the main game screen where they
 
 ##### Routes: 
 Front-End Angular Routes:
-| Route | Description |
-|/#/welcome| landing page - option to register or login |
+| Route     | Description  |
+|:---------:|:------------:|
+|/#/welcome | landing page - option to register or login |
 |/#/register| registration form |
-|/#/login| login form |
-|/#/game| the shell page for the game (has the option and sound buttons in a 'header') |
-|/#/home| game landing page - option to play solo or in a group |
-|/#/group| enter the name of the group to join |
-|/#/start| the team name is shown with all players who are in the team |
+|/#/login   | login form |
+|/#/game    | the shell page for the game (has the option and sound buttons in a 'header') |
+|/#/home    | game landing page - option to play solo or in a group |
+|/#/group   | enter the name of the group to join |
+|/#/start   | the team name is shown with all players who are in the team |
