@@ -13,7 +13,7 @@ a {
   color: #00B7FF;
 }
 
-/*header*/
+/*PAGE HEADER*/
 #main-header{
 	margin: 0 5% 0 5%;
 	border-bottom: 2px solid rgba(255,255,255,0.7);
@@ -28,7 +28,7 @@ a {
 	text-align: right;
 }
 
-/*forms*/
+/*FORMS LOGIN/REGISTER*/
 .form{
 	background-color: rgba(255,255,255,0.15);
 	text-align: center;
@@ -49,7 +49,7 @@ label {
 	text-align: left;
 }
 
-/*game*/
+/*GAME COMMON*/
 #game {
 	font-family: 'Press Start 2P', cursive;
 	position: relative;
@@ -59,24 +59,20 @@ label {
 	background-color: black;
 	border: white solid 1px;
 }
-
 #game-content {
 	position: relative;
 	/*top: -10vh;*/
 	width: 100%;
 	height: 80vh;
 }
-
 #game-content h1 {
 	position: relative;
 	top: 10vh;
 }
-
 #top-buttons {
 	font-size: 1.5vw;
 	color: white;
 }
-
 #top-buttons i {
 	width: 2vw;
 	height: 2vh;
@@ -85,26 +81,23 @@ label {
 	/*background-position: center;*/
 	/*text-align: center;*/
 }
-
 #top-buttons i:hover {
 	color: red;
 }
-
 #settings {
 	right: 2vw; top: 2vh;
 }
-
 #sound {
 	right: 5vw; top: 2vh;
 }
 
+/*GAME.HOME*/
 #game h1 {
 	text-align: center;
 	color: white;
 	font-size: 5vw;
 	margin-top: 10vh;
 }
-
 #menu {
 	background-color: rgba(0,0,0,0.5);
 	position: absolute;
@@ -116,17 +109,30 @@ label {
 	/*border: rgba(255,255,255,0.5) solid 1px;*/
 	text-align: center;
 }
-
 #menu button {
 	display: block;
 	margin: 0 auto;
 	font-size: 1.5vw;
 }
-
 #menu button:hover {
 	color: red;
 }
-
 #firstMenu {
 	margin-bottom: 5vh !important;
+}
+
+/*GAME.GROUP*/
+#game-group {
+	display: block;
+	margin: 0 auto;
+	position: relative;
+	top: 20vh;
+	width: 50vw;
+	text-align: center;
+}
+#game-group button {
+	margin-top: 5vh;
+}
+#game-group input {
+	width: 8vw;
 }

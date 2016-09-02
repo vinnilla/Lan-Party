@@ -4,9 +4,9 @@
 	angular.module('lanParty')
 		.factory('userData', main);
 
-	main.$inject = ['$http', '$state'];
+	main.$inject = ['$http', '$state', "$rootScope"];
 
-	function main($http, $state) {
+	function main($http, $state, $rootScope) {
 		var factory = {};
 		// connect to socket
 		var socket = io();
@@ -23,6 +23,12 @@
 
 		socket.on('connect-room', function(data) {
 			console.info(data.user);
+		})
+
+		socket.on('error', function(data) {
+			console.warn(data.msg);
+			factory.error = data.msg;
+			$rootScope.$broadcast('error');
 		})
 
 		factory.userDatabase = function() {

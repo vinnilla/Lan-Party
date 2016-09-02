@@ -8,7 +8,7 @@
 
 	mainController.$inject = ['userData']
 	userController.$inject = ['userData']
-	gameController.$inject = ['userData']
+	gameController.$inject = ['userData', "$rootScope"]
 
 	function mainController(userData) {
 		var self = this;
@@ -48,7 +48,7 @@
 
 	}// end of userController
 
-	function gameController(userData) {
+	function gameController(userData, $rootScope) {
 		var self = this;
 		this.userData = userData;
 		this.player = userData.user;
@@ -56,8 +56,13 @@
 
 		this.joinRoom = function() {
 			userData.joinRoom(self.room);
-
 		}
+
+		$rootScope.$on('error', function() {
+			console.log('error received')
+			self.error = userData.error;
+			$rootScope.$apply();
+		})
 	}// end of gameController
 
 

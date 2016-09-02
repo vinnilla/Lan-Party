@@ -1,2 +1,6 @@
-<label>Create/Join Room: </label> <input ng-model="game.room" type="text" placeholder="wdi11">
-<button ng-click="game.joinRoom()">Join</button>
+<div id="game-group">
+	<p>{{game.error}}</p>
+	<label>Create/Join Room</label><br/> 
+	<input ng-model="game.room" type="text" placeholder="wdi11">
+	<button ng-click="game.joinRoom()">Join</button>	
+</div>
