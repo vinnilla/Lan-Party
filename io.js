@@ -15,34 +15,39 @@ io.on('connection', function(socket) {
 	})
 
 	socket.on('join-room', function(data) {
+
 		function joinRoom() {
-			console.log(rooms);
-			console.info(`${socket.id} has joined ${data.name}`);
+			// console.info(`${player.name} has joined ${data.roomName}`);
 			// update player object with room name
-			player.room = data.name;
-			io.to(data.name).emit('connect-room', {user: data.name});
+			player.room = data.roomName;
+			io.to(player.room).emit('connect-room', {room: rooms[data.roomName]});
 		}
 
-		socket.join(data.name);
+		socket.join(data.roomName);
 		// keep track of rooms and number of players in them
-		if(!rooms[data.name]) {
-			rooms[data.name] = 1;
+		if(!rooms[data.roomName]) {
+			rooms[data.roomName] = [player];
 			joinRoom();
 		} 
-		else if(rooms[data.name] < 4) {
-			rooms[data.name]++;
+		else if(rooms[data.roomName].length < 4) {
+			rooms[data.roomName].push(player);
 			joinRoom();
 		}
 		else { // a 5th player is trying to join the room
 			io.emit('error', {msg:"That room is already full. Please try to join another room."})
 		}
+		console.log(rooms);
 	})
 
 	socket.on('disconnect', function() {
 		//disconnect player from room
 		if (player) {
 			//update hash table
-			rooms[player.room]--;
+			rooms[player.room] = rooms[player.room].filter(function(player) {
+				if(player.socket != socket.id) {
+					return player;
+				}
+			});
 			console.log(rooms);
 		}
 		players = players.filter(function(player) {

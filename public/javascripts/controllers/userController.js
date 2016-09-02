@@ -8,7 +8,7 @@
 
 	mainController.$inject = ['userData']
 	userController.$inject = ['userData']
-	gameController.$inject = ['userData', "$rootScope"]
+	gameController.$inject = ['userData', "$rootScope", "$scope"]
 
 	function mainController(userData) {
 		var self = this;
@@ -48,21 +48,48 @@
 
 	}// end of userController
 
-	function gameController(userData, $rootScope) {
-		var self = this;
-		this.userData = userData;
-		this.player = userData.user;
-		this.room;
+	function gameController(userData, $rootScope, $scope) {
+		// var self = this;
+		// this.userData = userData;
+		// this.player = userData.user;
+		// this.room;
 
-		this.joinRoom = function() {
-			userData.joinRoom(self.room);
+		// this.joinRoom = function() {
+		// 	userData.joinRoom(self.room);
+		// }
+
+		// $rootScope.$on('error', function() {
+		// 	console.log('error received')
+		// 	self.error = userData.error;
+		// 	$rootScope.$apply();
+		// })
+
+		// $rootScope.$on('newPlayers', function() {
+		// 	console.log('another player has joined');
+		// 	self.team = userData.getTeam();
+		// 	console.log(self.team);
+		// 	$rootScope.$apply();
+		// 	$scope.$apply();
+		// })
+
+		$scope.userData = userData;
+		$scope.player = userData.user;
+
+		$scope.joinRoom = function() {
+			userData.joinRoom($scope.room);
 		}
 
 		$rootScope.$on('error', function() {
-			console.log('error received')
-			self.error = userData.error;
-			$rootScope.$apply();
+			$scope.error = userData.error;
+			$scope.$apply();
 		})
+
+		$rootScope.$on('newPlayers', function() {
+			$scope.team = userData.room;
+			$scope.$apply();
+		})
+
+
 	}// end of gameController
 
 

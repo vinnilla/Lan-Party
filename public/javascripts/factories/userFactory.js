@@ -22,7 +22,9 @@
 		})
 
 		socket.on('connect-room', function(data) {
-			console.info(data.user);
+			factory.room = data.room;
+			$rootScope.$broadcast('newPlayers');
+			$state.transitionTo('game.start');
 		})
 
 		socket.on('error', function(data) {
@@ -94,9 +96,12 @@
 			return factory.error;
 		}
 
+		factory.getTeam = function() {
+			return factory.room;
+		}
+
 		factory.joinRoom = function(name) {
-			console.log(name);
-			socket.emit('join-room', {name: name, socket: factory.socket});
+			socket.emit('join-room', {roomName: name});
 		}
 
 		function addPlayer(player,token) {

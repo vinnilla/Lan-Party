@@ -35,7 +35,7 @@
 				})
 				.state('game', {
 					url: '/game',
-					controller: 'gameController as game',
+					controller: 'gameController',
 					templateUrl: 'views/game.html',
 					data: {
 						requireLogin: true
@@ -43,7 +43,7 @@
 				})
 				.state('game.home', {
 					url: '/home',
-					controller: 'gameController as game',
+					controller: 'gameController',
 					templateUrl: 'views/game.home.html',
 					data: {
 						requireLogin: true
@@ -51,7 +51,7 @@
 				})
 				.state('game.solo', {
 					url: '/solo',
-					controller: 'gameController as game',
+					controller: 'gameController',
 					templateUrl: 'views/game.solo.html',
 					data: {
 						requireLogin: true
@@ -59,8 +59,16 @@
 				})
 				.state('game.group', {
 					url: '/group',
-					controller: 'gameController as game',
+					controller: 'gameController',
 					templateUrl: 'views/game.group.html',
+					data: {
+						requireLogin: true
+					}
+				})
+				.state('game.start', {
+					url: '/start',
+					controller: 'gameController',
+					templateUrl: 'views/game.start.html',
 					data: {
 						requireLogin: true
 					}
