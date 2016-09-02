@@ -1,5 +1,5 @@
-<h3>WELCOME TO TEAM {{team[0].room.toUpperCase()}}</h3>
+<h3 id="game-start-header">WELCOME TO TEAM {{team[0].room.toUpperCase()}}</h3>
 
-<div ng-repeat="player in team">
-	<h3>{{player.name}}</h3>
+<div id="team-display" ng-repeat="player in team">
+	<h6>{{player.name}}</h6>
 </div>

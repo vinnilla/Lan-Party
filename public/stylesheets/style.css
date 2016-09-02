@@ -136,3 +136,11 @@ label {
 #game-group input {
 	width: 8vw;
 }
+
+/*GAME.START*/
+#game-start-header {
+	text-align: center;
+}
+#team-display {
+	margin-left: 2vw;
+}
