@@ -23,6 +23,19 @@ Route | Description
 /#/register| registration form
 /#/login   | login form
 /#/game    | the shell page for the game (has the option and sound buttons in a 'header')
-/#/home    | game landing page - option to play solo or in a group
-/#/group   | enter the name of the group to join
-/#/start   | the team name is shown with all players who are in the team
+/#/game/home    | game landing page - option to play solo or in a group
+/#/game/group   | enter the name of the group to join
+/#/game/start   | the team name is shown with all players who are in the team
+
+
+Back-End Express Routes:
+
+
+Action | Route | Description
+--- | --- | ---
+post | /login | local authorization for logging in
+post | /register | local authorization for registering
+get | /users | get all users in database
+post | /users | add a new user to database
+get | /user | pull user information (send to front end on login)
+delete | /users | remove user from database
