@@ -13,10 +13,7 @@ Main landing page allows users to register or login to a pre-existing account.
 Once registered/logged in, the users are sent to the main game screen where they are presented with the option to start the game solo, or join a room to play cooperatively.
 	If co-op is selected, users can type in the name of the room to join (if no room exists, a new room is created.) Only 4 players can play together.
 
-##### Routes: 
-Front-End Angular Routes:
-
-
+##### Front-End Angular Routes:
 Route | Description
 --- | ---
 /#/welcome | landing page - option to register or login
@@ -28,9 +25,7 @@ Route | Description
 /#/game/start   | the team name is shown with all players who are in the team
 
 
-Back-End Express Routes:
-
-
+##### Back-End Express Routes:
 Action | Route | Description
 --- | --- | ---
 post | /login | local authorization for logging in
@@ -39,3 +34,16 @@ get | /users | get all users in database
 post | /users | add a new user to database
 get | /user | pull user information (send to front end on login)
 delete | /users | remove user from database
+
+##### Models
+User:
+
+Key | Type | Value | Use
+--- | --- | --- | ---
+name | string | set on registration | authorization
+password_hash | string | set on registration | authorization
+socket | string | set on login | connecting to socket on backend
+experience | number | default 0, updates with gameplay | track overall level of character
+class | string | default null, updates when class is selected | track character class
+room | string | default null, updates when room is joined | track which users are in which rooms
+date | date | set on registration | track date and time account was made
