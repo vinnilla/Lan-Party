@@ -79,6 +79,16 @@
 			userData.joinRoom($scope.room);
 		}
 
+		$scope.startGame = function() {
+			userData.startGame();
+			document.addEventListener('keydown', function(e) {
+				console.log(e);
+				if (e.keyCode === 87 || e.keyCode === 68 || e.keyCode === 83 || e.keyCode === 65) {
+					userData.sendMovement(e.key);
+				}
+			})
+		}
+
 		$rootScope.$on('error', function() {
 			$scope.error = userData.error;
 			$scope.$apply();
@@ -89,6 +99,10 @@
 			$scope.$apply();
 		})
 
+		$rootScope.$on('startGame', function() {
+			$scope.team = userData.team;
+			$scope.$apply();
+		})
 
 	}// end of gameController
 

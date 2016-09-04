@@ -1,5 +1,10 @@
-<h3 id="game-start-header">WELCOME TO TEAM {{team[0].room.toUpperCase()}}</h3>
+<div id="game-start">
+	
+	<div id="team-display" ng-repeat="player in team">
+		<div class="player-image"></div>
+		<h6>{{player.name}}</h6>
+	</div>
 
-<div id="team-display" ng-repeat="player in team">
-	<h6>{{player.name}}</h6>
+	<div id="game-window" ui-view></div>
+	
 </div>

@@ -1,6 +1,6 @@
 #LAN PARTY
 
-### A real-time coop combat based game using socket.io
+### A real-time co-op combat based game using socket.io
 
 ##### MEAN Stack:
 Mongo is used to store account information (username and password) as well as character information associated with the account.
@@ -47,3 +47,5 @@ experience | number | default 0, updates with gameplay | track overall level of 
 class | string | default null, updates when class is selected | track character class
 room | string | default null, updates when room is joined | track which users are in which rooms
 date | date | set on registration | track date and time account was made
+
+##### Known Bugs:

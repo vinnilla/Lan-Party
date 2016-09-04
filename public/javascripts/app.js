@@ -73,6 +73,22 @@
 						requireLogin: true
 					}
 				})
+				.state('game.start.lobby', {
+					url: '/lobby',
+					controller: 'gameController',
+					templateUrl: 'views/game.start.lobby.html',
+					data: {
+						requireLogin: true
+					}
+				})
+				.state('game.start.playing', {
+					url: '/playing',
+					controller: 'gameController',
+					templateUrl: 'views/game.start.playing.html',
+					data: {
+						requireLogin: true
+					}
+				})
 		})// end of config
 		.run(function($rootScope, $state){
 			$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {

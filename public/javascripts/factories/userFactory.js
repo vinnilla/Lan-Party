@@ -24,7 +24,30 @@
 		socket.on('connect-room', function(data) {
 			factory.room = data.room;
 			$rootScope.$broadcast('newPlayers');
-			$state.transitionTo('game.start');
+			$state.transitionTo('game.start.lobby');
+		})
+
+		socket.on('start-game', function(team) {
+			factory.team = team;
+			console.log(factory.team)
+			$rootScope.$broadcast('startGame');
+		})
+
+		socket.on('move-player', function(move) {
+			// console.log(move);
+			var player = $(`#${move.player}`);
+			console.log(player)
+			if (move.key === 'w') {
+				player.css('top', `${parseInt(player.css('top')) - 5}px`);
+				console.log(player.css('top'));
+			} else if (move.key === 's') {
+				player.css('top', `${parseInt(player.css('top')) + 5}px`);
+			} else if (move.key === 'a') {
+				player.css('left', `${parseInt(player.css('left')) - 5}px`);
+			} else if (move.key === 'd') {
+				player.css('left', `${parseInt(player.css('left')) + 5}px`);
+			}
+
 		})
 
 		socket.on('error', function(data) {
@@ -102,6 +125,16 @@
 
 		factory.joinRoom = function(name) {
 			socket.emit('join-room', {roomName: name});
+		}
+
+		factory.startGame = function() {
+			$state.transitionTo('game.start.playing');
+			socket.emit('start-game', factory.room);
+		}
+
+		factory.sendMovement = function(key) {
+			console.log(key);
+			socket.emit('move-player', {player:factory.name, key: key});
 		}
 
 		function addPlayer(player,token) {
