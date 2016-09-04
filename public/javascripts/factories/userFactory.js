@@ -38,14 +38,14 @@
 			var player = $(`#${move.player}`);
 			console.log(player)
 			if (move.key === 'w') {
-				player.css('top', `${parseInt(player.css('top')) - 5}px`);
+				player.css('top', `${parseInt(player.css('top')) - 10}px`);
 				console.log(player.css('top'));
 			} else if (move.key === 's') {
-				player.css('top', `${parseInt(player.css('top')) + 5}px`);
+				player.css('top', `${parseInt(player.css('top')) + 10}px`);
 			} else if (move.key === 'a') {
-				player.css('left', `${parseInt(player.css('left')) - 5}px`);
+				player.css('left', `${parseInt(player.css('left')) - 10}px`);
 			} else if (move.key === 'd') {
-				player.css('left', `${parseInt(player.css('left')) + 5}px`);
+				player.css('left', `${parseInt(player.css('left')) + 10}px`);
 			}
 
 		})
