@@ -43,7 +43,7 @@
 				var name = $(`#${player.name}-name`).css('color', player.color);
 				var image = $(`#${player.name}-image`).css('background-color', player.color);
 			})
-			},200)
+			},500)
 		})
 
 		socket.on('start-game', function(team) {
@@ -71,7 +71,7 @@
 					element.css('background-color', player.color);
 					element.css('top', bottom/2);
 				})
-			},200)
+			},500)
 
 			// spawn zombies
 			setInterval(function() {
