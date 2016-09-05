@@ -16,7 +16,12 @@
 		factory.name;
 		factory.password;
 
-		var randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+		var r = Math.floor(Math.random()*100)+155;
+		var g = Math.floor(Math.random()*100)+155;
+		var b = Math.floor(Math.random()*100)+155;
+		var randomColor = `rgb(${r},${g},${b})`
+		console.log(randomColor);
+		// var randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
 
 		var bottom;
 		var right;
@@ -33,8 +38,8 @@
 			setTimeout(function() {
 			factory.room.forEach(function(player) {
 				console.log(player);
-				var element = $(`#${player.name}-name`);
-				element.css('color', player.color);
+				var name = $(`#${player.name}-name`).css('color', player.color);
+				var image = $(`#${player.name}-image`).css('background-color', player.color);
 			})
 			},100)
 		})
@@ -85,7 +90,7 @@
 			console.log(input);
 			getDimensions();
 			var ranNum = Math.floor(Math.random()*10000);
-			var distancePerTick = 50;
+			var distancePerTick = 25;
 			var player = $(`#${input.player}-player`);
 			if (input.key === "Space") {
 				// spawn a projectile at the player's position
@@ -108,7 +113,7 @@
 						clearInterval(intID);
 						bullet.remove();
 					}
-				},100)
+				},15)
 				
 			}
 		})

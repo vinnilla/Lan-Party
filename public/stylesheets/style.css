@@ -191,10 +191,12 @@ label {
 	position: absolute;
 	top: 500px;
 	left: 500px;
+	border-radius: 25px;
 }
 .bullet {
 	width: 20px;
-	height: 5px;
+	height: 2px;
 	background-color: white;
 	position: absolute;
+	border-radius: 25px;
 }
