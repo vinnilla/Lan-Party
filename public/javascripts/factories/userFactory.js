@@ -71,7 +71,7 @@
 					element.css('background-color', player.color);
 					element.css('top', bottom/2);
 				})
-			},500)
+			},200)
 
 			// spawn zombies
 			setInterval(function() {
