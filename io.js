@@ -48,6 +48,10 @@ io.on('connection', function(socket) {
 		io.to(player.room).emit('move-player', move);
 	})
 
+	socket.on('player-shoot', function(shoot) {
+		io.to(player.room).emit('player-shoot', shoot);
+	})
+
 	socket.on('disconnect', function() {
 		//disconnect player from room
 		if (player) {

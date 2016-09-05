@@ -192,3 +192,9 @@ label {
 	top: 500px;
 	left: 500px;
 }
+.bullet {
+	width: 20px;
+	height: 10px;
+	background-color: white;
+	position: relative;
+}
