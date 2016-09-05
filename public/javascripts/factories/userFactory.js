@@ -40,14 +40,16 @@
 			getDimensions();
 			var distancePerMove = 25;
 			var player = $(`#${move.player}`);
+			var height = player.height();
+			var width = player.width();
 			if (move.key === 'w' && parseInt(player.css('top')) > distancePerMove) {
 				player.css('top', `${parseInt(player.css('top')) - distancePerMove}px`);
 				console.log(player.css('top'));
-			} else if (move.key === 's') {
+			} else if (move.key === 's' && parseInt(player.css('top')) < (bottom-distancePerMove-height)) {
 				player.css('top', `${parseInt(player.css('top')) + distancePerMove}px`);
-			} else if (move.key === 'a') {
+			} else if (move.key === 'a' && parseInt(player.css('left')) > distancePerMove) {
 				player.css('left', `${parseInt(player.css('left')) - distancePerMove}px`);
-			} else if (move.key === 'd') {
+			} else if (move.key === 'd' && parseInt(player.css('left')) < (right-distancePerMove-width)) {
 				player.css('left', `${parseInt(player.css('left')) + distancePerMove}px`);
 			}
 		})
