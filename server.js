@@ -10,7 +10,7 @@ var mongoose = require('mongoose');
 require('dotenv').load();
 
 // connect to mongoDB;
-mongoose.connect('mongodb://localhost/lanParty');
+mongoose.connect(process.env.MONGODB_URI);
 
 var routes = require('./routes/index');
 
