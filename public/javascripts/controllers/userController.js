@@ -59,18 +59,6 @@
 
 		$scope.startGame = function() {
 			userData.startGame();
-			// movement
-			document.addEventListener('keydown', function(e) {
-				if (e.keyCode === 87 || e.keyCode === 68 || e.keyCode === 83 || e.keyCode === 65) {
-					userData.sendMovement(e.key);
-				}
-			})
-			// shooting
-			document.addEventListener('keydown', function(e) {
-				if (e.keyCode === 32) {
-					userData.sendShot(e.code); //code = "Space"
-				}
-			})
 		}
 
 		$rootScope.$on('error', function() {

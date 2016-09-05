@@ -32,6 +32,7 @@
 			$state.transitionTo('game.start.lobby');
 			setTimeout(function() {
 			factory.room.forEach(function(player) {
+				console.log(player);
 				var element = $(`#${player.name}-name`);
 				element.css('color', player.color);
 			})
@@ -39,14 +40,26 @@
 		})
 
 		socket.on('start-game', function(team) {
+			// movement
+			document.addEventListener('keydown', function(e) {
+				if (e.keyCode === 87 || e.keyCode === 68 || e.keyCode === 83 || e.keyCode === 65) {
+					factory.sendMovement(e.key);
+				}
+			})
+			// shooting
+			document.addEventListener('keydown', function(e) {
+				if (e.keyCode === 32) {
+					factory.sendShot(e.code); //code = "Space"
+				}
+			})
+			$state.transitionTo('game.start.playing');
 			factory.team = team;
 			console.log(factory.team);
-			$rootScope.$broadcast('startGame');
+			// $rootScope.$broadcast('startGame');
 			setTimeout(function() {
 				factory.team.forEach(function(player) {
 					var element = $(`#${player.name}-player`);
 					element.css('background-color', player.color);
-					console.log(element)
 				})
 			},100)
 		})
@@ -178,7 +191,7 @@
 		}
 
 		factory.startGame = function() {
-			$state.transitionTo('game.start.playing');
+			
 			socket.emit('start-game', factory.room);
 		}
 
