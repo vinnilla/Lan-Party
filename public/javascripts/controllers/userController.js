@@ -49,28 +49,6 @@
 	}// end of userController
 
 	function gameController(userData, $rootScope, $scope) {
-		// var self = this;
-		// this.userData = userData;
-		// this.player = userData.user;
-		// this.room;
-
-		// this.joinRoom = function() {
-		// 	userData.joinRoom(self.room);
-		// }
-
-		// $rootScope.$on('error', function() {
-		// 	console.log('error received')
-		// 	self.error = userData.error;
-		// 	$rootScope.$apply();
-		// })
-
-		// $rootScope.$on('newPlayers', function() {
-		// 	console.log('another player has joined');
-		// 	self.team = userData.getTeam();
-		// 	console.log(self.team);
-		// 	$rootScope.$apply();
-		// 	$scope.$apply();
-		// })
 
 		$scope.userData = userData;
 		$scope.player = userData.user;
@@ -89,7 +67,6 @@
 			})
 			// shooting
 			document.addEventListener('keydown', function(e) {
-				console.log(e);
 				if (e.keyCode === 32) {
 					userData.sendShot(e.code); //code = "Space"
 				}

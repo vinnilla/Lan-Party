@@ -16,6 +16,8 @@
 		factory.name;
 		factory.password;
 
+		var randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+
 		var bottom;
 		var right;
 
@@ -28,23 +30,35 @@
 			factory.room = data.room;
 			$rootScope.$broadcast('newPlayers');
 			$state.transitionTo('game.start.lobby');
+			setTimeout(function() {
+			factory.room.forEach(function(player) {
+				var element = $(`#${player.name}-name`);
+				element.css('color', player.color);
+			})
+			},100)
 		})
 
 		socket.on('start-game', function(team) {
 			factory.team = team;
-			console.log(factory.team)
+			console.log(factory.team);
 			$rootScope.$broadcast('startGame');
+			setTimeout(function() {
+				factory.team.forEach(function(player) {
+					var element = $(`#${player.name}-player`);
+					element.css('background-color', player.color);
+					console.log(element)
+				})
+			},100)
 		})
 
 		socket.on('move-player', function(move) {
 			getDimensions();
-			var distancePerMove = 25;
-			var player = $(`#${move.player}`);
+			var distancePerMove = 50;
+			var player = $( `#${move.player}-player`);
 			var height = player.height();
 			var width = player.width();
 			if (move.key === 'w' && parseInt(player.css('top')) > distancePerMove) {
 				player.css('top', `${parseInt(player.css('top')) - distancePerMove}px`);
-				console.log(player.css('top'));
 			} else if (move.key === 's' && parseInt(player.css('top')) < (bottom-distancePerMove-height)) {
 				player.css('top', `${parseInt(player.css('top')) + distancePerMove}px`);
 			} else if (move.key === 'a' && parseInt(player.css('left')) > distancePerMove) {
@@ -55,21 +69,23 @@
 		})
 
 		socket.on('player-shoot', function(input) {
+			console.log(input);
 			getDimensions();
 			var ranNum = Math.floor(Math.random()*10000);
 			var distancePerTick = 50;
-			var player = $(`#${input.player}`);
+			var player = $(`#${input.player}-player`);
 			if (input.key === "Space") {
 				// spawn a projectile at the player's position
-				var top = player.css('top');
-				var left = player.css('left');
+				var top = `${parseInt(player.css('top'))+20}px`;
+				var left = `${parseInt(player.css('left'))+50}px`;
 				$('<div/>', {
 					id: `${input.player}_bullet${ranNum}`,
-					class: 'bullet'
+					'class': 'bullet'
 				}).appendTo('#playing');
 				var bullet = $(`#${input.player}_bullet${ranNum}`);
 				bullet.css('top', top);
 				bullet.css('left', left);
+				bullet.css('background-color', input.color);
 				// make the projectile move
 				var intID = setInterval(function() {
 					bullet.css('left', `${parseInt(bullet.css('left'))+distancePerTick}px`);
@@ -171,13 +187,13 @@
 		}
 
 		factory.sendShot = function(key) {
-			socket.emit('player-shoot', {player:factory.name, key: key});
+			socket.emit('player-shoot', {player:factory.name, key: key, color: randomColor});
 		}
 
 		function addPlayer(player,token) {
 			// keep user data in factory
 			factory.user = player;
-			socket.emit('add-player', {name:player.name, socket: player.socket, class: player.class, exp: player.experience, token: token})
+			socket.emit('add-player', {name:player.name, socket: player.socket, class: player.class, exp: player.experience, color: randomColor, token: token})
 			// switch to game state
 			$state.transitionTo('game.home')
 		}
@@ -187,7 +203,7 @@
 			var gameBoard = $(`#playing`);
 			bottom = gameBoard.height();
 			right = gameBoard.width();
-			console.log(gameBoard, bottom, right);
+			// console.log(gameBoard, bottom, right);
 		}
 
 		return factory;
