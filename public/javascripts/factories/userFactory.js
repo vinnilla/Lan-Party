@@ -16,15 +16,17 @@
 		factory.name;
 		factory.password;
 
-		var r = Math.floor(Math.random()*100)+155;
-		var g = Math.floor(Math.random()*100)+155;
-		var b = Math.floor(Math.random()*100)+155;
-		var randomColor = `rgb(${r},${g},${b})`
+		var r = Math.floor(Math.random()*155)+100;
+		var g = Math.floor(Math.random()*155)+100;
+		var b = Math.floor(Math.random()*155)+100;
+		var randomColor = `rgb(${r},${g},${b})`;
 		console.log(randomColor);
 		// var randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
 
 		var bottom;
 		var right;
+
+		var frames = 15;
 
 		socket.on('get-socket', function(data) {
 			factory.socket = data.socket;
@@ -62,11 +64,24 @@
 			console.log(factory.team);
 			// $rootScope.$broadcast('startGame');
 			setTimeout(function() {
+				getDimensions();
+				console.log(bottom);
 				factory.team.forEach(function(player) {
 					var element = $(`#${player.name}-player`);
 					element.css('background-color', player.color);
+					element.css('top', bottom/2);
 				})
 			},100)
+
+			// spawn zombies
+			setInterval(function() {
+				spawnZombie();
+			}, 1000)
+
+			// check collsion
+			setInterval(function() {
+				checkCollision();
+			},frames);
 		})
 
 		socket.on('move-player', function(move) {
@@ -87,7 +102,6 @@
 		})
 
 		socket.on('player-shoot', function(input) {
-			console.log(input);
 			getDimensions();
 			var ranNum = Math.floor(Math.random()*10000);
 			var distancePerTick = 25;
@@ -113,8 +127,7 @@
 						clearInterval(intID);
 						bullet.remove();
 					}
-				},15)
-				
+				},frames)				
 			}
 		})
 
@@ -222,6 +235,46 @@
 			bottom = gameBoard.height();
 			right = gameBoard.width();
 			// console.log(gameBoard, bottom, right);
+		}
+
+		function spawnZombie() {
+			getDimensions();
+			var y = Math.floor(Math.random() * (bottom-100));
+			var remainder = y%50;
+			y = 50+y-remainder;
+			var ranNum = Math.floor(Math.random()*10000);
+			$('<div/>', {
+				'class': 'zombie',
+				id: `z-${ranNum}`
+			}).appendTo('#playing')
+			.css('top', y)
+			.css('left', right-50);
+			var zombie = $(`#z-${ranNum}`);
+			var intID = setInterval(function() {
+				var currentPos = parseInt(zombie.css('left'))-1;
+				zombie.css('left', `${currentPos}px`);
+			}, frames)
+		}
+
+		function checkCollision() {
+			var bullets = $(".bullet");
+			var zombies = $(".zombie");
+			for (var i=0; i< bullets.length; i++) {
+				var bulletPos = $(bullets[i]).position();
+				for (var j=0; j<zombies.length; j++) {
+					var zomPos = $(zombies[j]).position();
+					var zomHeight = $(zombies[j]).height();
+					var zomWidth = $(zombies[j]).width();
+					// check to see if bullet position and zombie position range match
+					if (bulletPos.left > zomPos.left && bulletPos.left < (zomPos.left+zomWidth) &&
+							bulletPos.top > zomPos.top && bulletPos.top < (zomPos.top+zomHeight) ) {
+						console.log('zombie hit!');
+						$(bullets[i]).remove();
+						$(zombies[j]).remove();
+					}
+				}
+			}
+
 		}
 
 		return factory;
