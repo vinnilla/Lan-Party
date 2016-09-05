@@ -43,7 +43,7 @@
 				var name = $(`#${player.name}-name`).css('color', player.color);
 				var image = $(`#${player.name}-image`).css('background-color', player.color);
 			})
-			},100)
+			},200)
 		})
 
 		socket.on('start-game', function(team) {
@@ -71,7 +71,7 @@
 					element.css('background-color', player.color);
 					element.css('top', bottom/2);
 				})
-			},100)
+			},200)
 
 			// spawn zombies
 			setInterval(function() {
@@ -79,9 +79,9 @@
 			}, 1000)
 
 			// check collsion
-			setInterval(function() {
-				checkCollision();
-			},frames);
+			// setInterval(function() {
+			// 	checkCollision();
+			// },frames);
 		})
 
 		socket.on('move-player', function(move) {
@@ -121,10 +121,12 @@
 				// make the projectile move
 				var intID = setInterval(function() {
 					bullet.css('left', `${parseInt(bullet.css('left'))+distancePerTick}px`);
+
+					// check collision with zombies
+					checkCollision(bullet);
+
 					// delete bullet once border is hit
 					if (parseInt(bullet.css('left'))+distancePerTick > right) {
-						console.log('border hit');
-						clearInterval(intID);
 						bullet.remove();
 					}
 				},frames)				
@@ -256,11 +258,13 @@
 			}, frames)
 		}
 
-		function checkCollision() {
-			var bullets = $(".bullet");
+		function checkCollision(bullet) {
+			// TODO optimize with nlog(n)
+			// var bullets = $(".bullet");
 			var zombies = $(".zombie");
-			for (var i=0; i< bullets.length; i++) {
-				var bulletPos = $(bullets[i]).position();
+			var bulletPos = bullet.position();
+			// for (var i=0; i< bullets.length; i++) {
+			// 	var bulletPos = $(bullets[i]).position();
 				for (var j=0; j<zombies.length; j++) {
 					var zomPos = $(zombies[j]).position();
 					var zomHeight = $(zombies[j]).height();
@@ -268,12 +272,11 @@
 					// check to see if bullet position and zombie position range match
 					if (bulletPos.left > zomPos.left && bulletPos.left < (zomPos.left+zomWidth) &&
 							bulletPos.top > zomPos.top && bulletPos.top < (zomPos.top+zomHeight) ) {
-						console.log('zombie hit!');
-						$(bullets[i]).remove();
+						bullet.remove();
 						$(zombies[j]).remove();
 					}
 				}
-			}
+			//}
 
 		}
 
