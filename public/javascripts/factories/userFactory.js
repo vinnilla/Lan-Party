@@ -28,6 +28,9 @@
 
 		var frames = 15;
 
+		var canvas;
+		var ctx;
+
 		socket.on('get-socket', function(data) {
 			factory.socket = data.socket;
 			console.info(factory.socket);
@@ -60,23 +63,35 @@
 				}
 			})
 			$state.transitionTo('game.start.playing');
+
+
 			factory.team = team;
-			console.log(factory.team);
+			// console.log(factory.team);
 			// $rootScope.$broadcast('startGame');
 			setTimeout(function() {
-				getDimensions();
-				console.log(bottom);
+				canvas = document.getElementById('game_canvas');
+				ctx = canvas.getContext('2d');
+				var border = $('#game');
+				ctx.canvas.width = border.width();
+				ctx.canvas.height = border.height()*0.9;
+				// getDimensions();
+				// console.log(bottom);
 				factory.team.forEach(function(player) {
-					var element = $(`#${player.name}-player`);
-					element.css('background-color', player.color);
-					element.css('top', bottom/2);
+					player.score = 0;
+					player.x = 50;
+					player.y = 300;
+					console.log(player);
+					factory.player = player;
+					ctx.fillStyle = player.color;
+					ctx.fillRect(player.x, player.y, 50, 50);
+					// element.css('top', bottom/2);
 				})
 			},200)
 
 			// spawn zombies
-			setInterval(function() {
-				spawnZombie();
-			}, 1000)
+			// setInterval(function() {
+			// 	spawnZombie();
+			// }, 5000-(1000*team.length))
 
 			// check collsion
 			// setInterval(function() {
@@ -85,20 +100,47 @@
 		})
 
 		socket.on('move-player', function(move) {
-			getDimensions();
+			var playerIndex;
+			factory.team.forEach(function(player, index) {
+				if (player.name === move.player) {
+					playerIndex = index;
+				}
+			})
+			// getDimensions();
 			var distancePerMove = 50;
-			var player = $( `#${move.player}-player`);
-			var height = player.height();
-			var width = player.width();
-			if (move.key === 'w' && parseInt(player.css('top')) > distancePerMove) {
-				player.css('top', `${parseInt(player.css('top')) - distancePerMove}px`);
-			} else if (move.key === 's' && parseInt(player.css('top')) < (bottom-distancePerMove-height)) {
-				player.css('top', `${parseInt(player.css('top')) + distancePerMove}px`);
-			} else if (move.key === 'a' && parseInt(player.css('left')) > distancePerMove) {
-				player.css('left', `${parseInt(player.css('left')) - distancePerMove}px`);
-			} else if (move.key === 'd' && parseInt(player.css('left')) < (right-distancePerMove-width)) {
-				player.css('left', `${parseInt(player.css('left')) + distancePerMove}px`);
+			// clear canvas
+			ctx.clearRect(0,0,canvas.width, canvas.height);
+			// set color
+			ctx.fillStyle = factory.team[playerIndex].color;
+			// var player = $( `#${move.player}-player`);
+			// var height = player.height();
+			// var width = player.width();
+			// if (move.key === 'w' && parseInt(player.css('top')) > distancePerMove) {
+			// 	player.css('top', `${parseInt(player.css('top')) - distancePerMove}px`);
+			// } else if (move.key === 's' && parseInt(player.css('top')) < (bottom-distancePerMove-height)) {
+			// 	player.css('top', `${parseInt(player.css('top')) + distancePerMove}px`);
+			// } else if (move.key === 'a' && parseInt(player.css('left')) > distancePerMove) {
+			// 	player.css('left', `${parseInt(player.css('left')) - distancePerMove}px`);
+			// } else if (move.key === 'd' && parseInt(player.css('left')) < (right-distancePerMove-width)) {
+			// 	player.css('left', `${parseInt(player.css('left')) + distancePerMove}px`);
+			// }
+
+			// TODO: make boundaries
+			if (move.key === 'w' && (factory.team[playerIndex].y-distancePerMove) >= 0) {
+				factory.team[playerIndex].y -= distancePerMove;
 			}
+			if (move.key === 's' && (factory.team[playerIndex].y+distancePerMove) <= canvas.height) {				
+				factory.team[playerIndex].y += distancePerMove;
+			}
+			if (move.key === 'a' && (factory.team[playerIndex].x-distancePerMove) >= 0) {
+				factory.team[playerIndex].x -= distancePerMove;
+			}
+			if (move.key === 'd' && (factory.team[playerIndex].x+distancePerMove) <= canvas.width) {
+				factory.team[playerIndex].x += distancePerMove;
+			}
+			factory.team.forEach(function(player) {
+				ctx.fillRect(player.x, player.y, 50, 50);
+			})
 		})
 
 		socket.on('player-shoot', function(input) {
@@ -123,13 +165,38 @@
 					bullet.css('left', `${parseInt(bullet.css('left'))+distancePerTick}px`);
 
 					// check collision with zombies
-					checkCollision(bullet);
+					checkCollision(bullet, intID);
 
 					// delete bullet once border is hit
 					if (parseInt(bullet.css('left'))+distancePerTick > right) {
+						clearInterval(intID);
 						bullet.remove();
 					}
 				},frames)				
+			}
+		})
+
+		socket.on('player-slash', function(input) {
+			var ranNum = Math.floor(Math.random()*10000);
+			var distance = 50;
+			var player = $(`#${input.player}-player`);
+			if (input.key === "Space") {
+				// spawn a sword at the player's position
+				var top = `${parseInt(player.css('top'))+20}px`;
+				var left = `${parseInt(player.css('left'))+50}px`;
+				$('<div/>', {
+					id: `${input.player}_melee${ranNum}`,
+					'class': 'melee'
+				}).appendTo('#playing');
+				var weapon = $(`#${input.player}_melee${ranNum}`);
+				weapon.css('top', top);
+				weapon.css('left', left);
+				weapon.css('background-color', input.color);
+				// check collision w/ zombies
+				checkCollisionMelee(weapon);
+				setTimeout(function() {
+					weapon.remove();
+				}, 1000)
 			}
 		})
 
@@ -258,11 +325,13 @@
 			}, frames)
 		}
 
-		function checkCollision(bullet) {
+		function checkCollision(bullet, intervalID) {
 			// TODO optimize with nlog(n)
 			// var bullets = $(".bullet");
 			var zombies = $(".zombie");
 			var bulletPos = bullet.position();
+			var bulletID = bullet.attr('id');
+			var playerName = bulletID.substring(0,bulletID.indexOf('_'));
 			// for (var i=0; i< bullets.length; i++) {
 			// 	var bulletPos = $(bullets[i]).position();
 				for (var j=0; j<zombies.length; j++) {
@@ -272,13 +341,44 @@
 					// check to see if bullet position and zombie position range match
 					if (bulletPos.left > zomPos.left && bulletPos.left < (zomPos.left+zomWidth) &&
 							bulletPos.top > zomPos.top && bulletPos.top < (zomPos.top+zomHeight) ) {
+						clearInterval(intervalID);
 						bullet.remove();
 						$(zombies[j]).remove();
+						factory.team.forEach(function(player) {
+							if(player.name === playerName) {
+								player.score += 5;
+							}
+						})
+						console.log(factory.team[0].score);
 					}
 				}
-			//}
+			}
 
-		}
+			function checkCollisionMelee(weapon) {
+				var weapon_length = 50
+				var zombies = $('.zombie');
+				var weaponPos = weapon.position();
+				var weaponEnd = weaponPos.left + weapon_length;
+				var weaponID = weapon.attr('id');
+				var playerName = weaponID.substring(0,weaponID.indexOf('_'));
+				for (var j=0; j<zombies.length; j++) {
+					var zomPos = $(zombies[j]).position();
+					var zomHeight = $(zombies[j]).height();
+					var zomWidth = $(zombies[j]).width();
+					// check to see if bullet position and zombie position range match
+					if (weaponEnd > zomPos.left && weaponEnd < (zomPos.left+zomWidth) &&
+							weaponPos.top > zomPos.top && weaponPos.top < (zomPos.top+zomHeight) ) {
+						weapon.remove();
+						$(zombies[j]).remove();
+						factory.team.forEach(function(player) {
+							if(player.name === playerName) {
+								player.score += 5;
+							}
+						})
+						console.log(factory.team[0].score);
+					}
+				}
+			}
 
 		return factory;
 	}

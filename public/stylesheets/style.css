@@ -168,6 +168,11 @@ label {
 	top: -2px;
 }
 
+/*CANVAS*/
+canvas {
+	border: 1px red solid;
+}
+
 /*GAME.START.LOBBY*/
 #game-lobby{
 	text-align: center;
@@ -199,6 +204,11 @@ label {
 	background-color: white;
 	position: absolute;
 	border-radius: 25px;
+}
+.weapon {
+	width: 50px;
+	height: 10px;
+	position: absolute;
 }
 .zombie {
 	width: 50px;
