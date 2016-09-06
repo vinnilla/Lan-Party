@@ -49,7 +49,7 @@ io.on('connection', function(socket) {
 	})
 
 	socket.on('player-shoot', function(shoot) {
-		io.to(player.room).emit('player-slash', shoot);
+		io.to(player.room).emit('player-shoot', shoot);
 	})
 
 	socket.on('disconnect', function() {

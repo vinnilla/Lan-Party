@@ -16,6 +16,9 @@
 		factory.name;
 		factory.password;
 
+		factory.team;
+		factory.bullets = [];
+
 		var r = Math.floor(Math.random()*155)+100;
 		var g = Math.floor(Math.random()*155)+100;
 		var b = Math.floor(Math.random()*155)+100;
@@ -50,6 +53,7 @@
 		})
 
 		socket.on('start-game', function(team) {
+
 			// movement
 			document.addEventListener('keydown', function(e) {
 				if (e.keyCode === 87 || e.keyCode === 68 || e.keyCode === 83 || e.keyCode === 65) {
@@ -101,31 +105,14 @@
 
 		socket.on('move-player', function(move) {
 			var playerIndex;
+			// find player that moved
 			factory.team.forEach(function(player, index) {
 				if (player.name === move.player) {
 					playerIndex = index;
 				}
 			})
-			// getDimensions();
 			var distancePerMove = 50;
-			// clear canvas
-			ctx.clearRect(0,0,canvas.width, canvas.height);
-			// set color
-			ctx.fillStyle = factory.team[playerIndex].color;
-			// var player = $( `#${move.player}-player`);
-			// var height = player.height();
-			// var width = player.width();
-			// if (move.key === 'w' && parseInt(player.css('top')) > distancePerMove) {
-			// 	player.css('top', `${parseInt(player.css('top')) - distancePerMove}px`);
-			// } else if (move.key === 's' && parseInt(player.css('top')) < (bottom-distancePerMove-height)) {
-			// 	player.css('top', `${parseInt(player.css('top')) + distancePerMove}px`);
-			// } else if (move.key === 'a' && parseInt(player.css('left')) > distancePerMove) {
-			// 	player.css('left', `${parseInt(player.css('left')) - distancePerMove}px`);
-			// } else if (move.key === 'd' && parseInt(player.css('left')) < (right-distancePerMove-width)) {
-			// 	player.css('left', `${parseInt(player.css('left')) + distancePerMove}px`);
-			// }
-
-			// TODO: make boundaries
+			// check movement keys
 			if (move.key === 'w' && (factory.team[playerIndex].y-distancePerMove) >= 0) {
 				factory.team[playerIndex].y -= distancePerMove;
 			}
@@ -138,41 +125,50 @@
 			if (move.key === 'd' && (factory.team[playerIndex].x+distancePerMove) <= canvas.width) {
 				factory.team[playerIndex].x += distancePerMove;
 			}
-			factory.team.forEach(function(player) {
-				ctx.fillRect(player.x, player.y, 50, 50);
-			})
+			drawAll();
 		})
 
 		socket.on('player-shoot', function(input) {
-			getDimensions();
-			var ranNum = Math.floor(Math.random()*10000);
+			var playerIndex;
+			// find player that moved
+			factory.team.forEach(function(player, index) {
+				if (player.name === input.player) {
+					playerIndex = index;
+				}
+			})
 			var distancePerTick = 25;
-			var player = $(`#${input.player}-player`);
-			if (input.key === "Space") {
-				// spawn a projectile at the player's position
-				var top = `${parseInt(player.css('top'))+20}px`;
-				var left = `${parseInt(player.css('left'))+50}px`;
-				$('<div/>', {
-					id: `${input.player}_bullet${ranNum}`,
-					'class': 'bullet'
-				}).appendTo('#playing');
-				var bullet = $(`#${input.player}_bullet${ranNum}`);
-				bullet.css('top', top);
-				bullet.css('left', left);
-				bullet.css('background-color', input.color);
-				// make the projectile move
-				var intID = setInterval(function() {
-					bullet.css('left', `${parseInt(bullet.css('left'))+distancePerTick}px`);
-
-					// check collision with zombies
-					checkCollision(bullet, intID);
-
-					// delete bullet once border is hit
-					if (parseInt(bullet.css('left'))+distancePerTick > right) {
-						clearInterval(intID);
-						bullet.remove();
+			// check input
+			if (input.key === 'Space') {
+				var ranNum = Math.floor(Math.random()*10000);
+				// create projectile object
+				var bullet = {id: ranNum,
+											x: factory.team[playerIndex].x,
+											y: factory.team[playerIndex].y+24,
+											color: factory.team[playerIndex].color};
+				// add bullet to array
+				factory.bullets.push(bullet);
+				// store bullet index
+				var bulletIndex;
+				factory.bullets.forEach(function(bullet, index) {
+					if (bullet.id === ranNum) {
+						bulletIndex = index;
 					}
-				},frames)				
+				}) 				
+				// set movement
+				var intID = setInterval(function() {
+					// move bullet right
+					factory.bullets[bulletIndex].x += distancePerTick;
+					if (factory.bullets[bulletIndex].x >= canvas.width) {
+						// remove bullet from array when boundary is hit
+						factory.bullets.filter(function(bullet) {
+							if (bullet.id != bulletIndex) {
+								return bullet;
+							}
+						})
+						clearInterval(intID);
+					}
+					drawAll();
+				}, frames)
 			}
 		})
 
@@ -378,6 +374,29 @@
 						console.log(factory.team[0].score);
 					}
 				}
+			}
+
+			// CANVAS FUNCTIONS
+
+			function drawAll() {
+				// clear canvas
+				ctx.clearRect(0,0,canvas.width, canvas.height);
+				drawPlayers();
+				drawBullets();
+			}
+
+			function drawPlayers() {
+				factory.team.forEach(function(player) {
+					ctx.fillStyle = player.color;
+					ctx.fillRect(player.x, player.y, 50, 50);
+				})
+			}
+
+			function drawBullets() {
+				factory.bullets.forEach(function(bullet) {
+					ctx.fillStyle = bullet.color;
+					ctx.fillRect(bullet.x, bullet.y, 10, 3);
+				})
 			}
 
 		return factory;
