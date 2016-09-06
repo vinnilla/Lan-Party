@@ -146,30 +146,31 @@
 											y: factory.team[playerIndex].y+24,
 											color: factory.team[playerIndex].color};
 				// add bullet to array
-				factory.bullets.push(bullet);
-				// store bullet index
-				var bulletIndex;
-				factory.bullets.forEach(function(bullet, index) {
-					if (bullet.id === ranNum) {
-						bulletIndex = index;
-					}
-				}) 				
+				factory.bullets.push(bullet); 				
 				// set movement
 				var intID = setInterval(function() {
+					// store bullet index
+					var bulletIndex;
+					factory.bullets.forEach(function(bullet, index) {
+						if (bullet.id === ranNum) {
+							bulletIndex = index;
+						}
+					})
 					// move bullet right
 					factory.bullets[bulletIndex].x += distancePerTick;
-					if (factory.bullets[bulletIndex].x >= canvas.width) {
+					drawAll();
+					if (factory.bullets[bulletIndex].x > canvas.width) {
 						// remove bullet from array when boundary is hit
-						factory.bullets.filter(function(bullet) {
-							if (bullet.id != bulletIndex) {
+						factory.bullets = factory.bullets.filter(function(bullet) {
+							if (bullet.id != ranNum) {
 								return bullet;
 							}
 						})
 						clearInterval(intID);
 					}
-					drawAll();
 				}, frames)
 			}
+			console.log(factory.bullets.length)
 		})
 
 		socket.on('player-slash', function(input) {
