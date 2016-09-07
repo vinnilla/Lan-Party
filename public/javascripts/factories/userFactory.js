@@ -253,7 +253,6 @@
 		}
 
 		factory.startGame = function() {
-			
 			socket.emit('start-game', factory.room);
 		}
 
@@ -298,6 +297,7 @@
 		}
 
 		function checkCollision() {
+			// bullet zombie collision
 			factory.bullets.forEach(function(bullet, bIndex) {
 				factory.zombies.forEach(function(zombie, zIndex) {
 					if (bullet.y > zombie.y && bullet.y < zombie.y+50 &&
@@ -310,6 +310,16 @@
 						clearInterval(zombie.intID);
 					}
 				})				
+			})
+
+			// player zombie collision
+			factory.team.forEach(function(player, pIndex) {
+				factory.zombies.forEach(function(zombie) {
+					if (player.x+25 > zombie.x && player.x+25 < zombie.x+50 &&
+							player.y+25 > zombie.y && player.y+25 < zombie.y+50) {
+						factory.team.splice(pIndex,1);
+					}
+				})
 			})
 			drawAll();
 		}
