@@ -1,4 +1,4 @@
-#[LAN PARTY](http://lan-party.herokuapp.com "Lan Party");
+#[LAN PARTY](http://lan-party.herokuapp.com "Lan Party")
 
 ### A real-time co-op combat based game using socket.io
 
@@ -13,6 +13,7 @@ Socket.io is used to create the multiplayer aspect of the game. Players can play
 Main landing page allows users to register or login to a pre-existing account.
 Once registered/logged in, the users are sent to the main game screen where they are presented with the option to start the game solo, or join a room to play cooperatively.
 	If co-op is selected, users can type in the name of the room to join (if no room exists, a new room is created.) Only 4 players can play together.
+	The game progresses in waves until the team eventually succumbs to the neverending horde of zombies.
 
 ##### Front-End Angular Routes:
 Route | Description
@@ -23,7 +24,8 @@ Route | Description
 /#/game    | the shell page for the game (has the option and sound buttons in a 'header')
 /#/game/home    | game landing page - option to play solo or in a group
 /#/game/group   | enter the name of the group to join
-/#/game/start   | the team name is shown with all players who are in the team
+/#/game/start/lobby   | the team name is shown with all players who are in the team
+/#/game/start/playing | the game runs and the team tries to survive the unending onslaught
 
 
 ##### Back-End Express Routes:
