@@ -380,7 +380,7 @@
 					ctx.fillStyle = player.color;
 					ctx.fillRect(player.x, player.y, 50, 50);
 					ctx.font = '24px serif';
-					ctx.strokeText(player.score, player.x+10, player.y+30)
+					ctx.strokeText(player.score, player.x+5, player.y+30)
 				})
 			}
 
