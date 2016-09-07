@@ -21,7 +21,7 @@
 		factory.bullets = [];
 		factory.zombies = [];
 		var frames = 15;
-		var baseNumZombies = 15;
+		var baseNumZombies = 1;
 		var round = 0;
 		var canvas;
 		var ctx;
@@ -53,13 +53,32 @@
 			document.removeEventListener('keydown', shoot);
 			factory.message = `END OF ROUND ${round}`;
 			$rootScope.$broadcast('refresh');
+
+			// convert points to exp and save to backend
+			factory.team.forEach(function(player) {
+				// 5 xp/point
+				var exp = player.score * 5;
+				console.log(exp);
+				$http.put('/api/users', {
+					name: player.name,
+					exp: exp
+				})
+				.then(function(response) {
+					console.log(response);
+					if (response.data.error) {
+						console.log(response.data.error)
+					}
+					else {
+						// response.data has the updated user information
+						// response.data.experience is how much exp the user has
+					}
+				})
+			})
+
 			setTimeout(function() {
 				document.removeEventListener('keydown', movement);
 				factory.message = `STARTING ROUND ${round+1}`;
 				$rootScope.$broadcast('refresh');
-
-				// TODO TODO TODO convert points to exp and save to backend
-
 				// start round
 				socket.emit('start-game', team, factory.room);
 			},5000)
@@ -145,28 +164,29 @@
 						}
 
 						function spawnZombie() {
-							// var y = Math.floor(Math.random() * canvas.height-100);
-							var y = ((new Date().getTime()) % canvas.height)-100;
-							var remainder = y%50;
-							y = 50+y-remainder;
-							var ranNum = Math.floor(Math.random()*10000);
-							// create new zombie
-							var zombie = {id: ranNum, y: y, x:canvas.width};
-							factory.zombies.push(zombie);
-							// zombie movement
-							var intID = setInterval(function(){
-								// find zombie index
-								var zomIndex;
-								factory.zombies.forEach(function(zombie, index) {
-									if(zombie.id === ranNum) {
-										zomIndex = index;
-									}
-								})
-								// save intID into zombie object
-								factory.zombies[zomIndex].intID = intID;
-								// move zombie left
-								factory.zombies[zomIndex].x -= 2;
-							}, frames)
+							// var y = ((new Date().getTime()) % canvas.height)-100;
+							socket.emit('get-random', canvas.height, factory.room);
+							socket.on('get-random', function(randomHeight) {
+								var ranNum = Math.floor(Math.random()*10000);
+								// create new zombie
+								var zombie = {id: ranNum, y: randomHeight, x:canvas.width};
+								factory.zombies.push(zombie);
+								// zombie movement
+								var intID = setInterval(function(){
+									// find zombie index
+									var zomIndex;
+									factory.zombies.forEach(function(zombie, index) {
+										if(zombie.id === ranNum) {
+											zomIndex = index;
+										}
+									})
+									// save intID into zombie object
+									factory.zombies[zomIndex].intID = intID;
+									// move zombie left
+									factory.zombies[zomIndex].x -= 2;
+								}, frames)
+							})
+							
 						}
 
 						function checkCollision() {

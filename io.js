@@ -56,6 +56,13 @@ io.on('connection', function(socket) {
 		io.to(room).emit('round-end', team);
 	})
 
+	socket.on('get-random', function(height, room) {
+		var y = Math.floor(Math.random() * height-100);
+		var remainder = y%50;
+		y = 50+y-remainder;
+		io.to(room).emit('get-random', y);
+	})
+
 	socket.on('disconnect', function() {
 		//disconnect player from room
 		if (player) {

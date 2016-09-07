@@ -29,6 +29,26 @@ function create(req,res) {
 	})
 }
 
+function update(req, res) {
+	console.log(req.body);
+	User.findOne({name: req.body.name}, function(err, user) {
+		if (err) {
+			res.json(err);
+		}
+		else {
+			user.experience += req.body.exp;
+			user.save(function(err, update) {
+				if (err) {
+					res.json({error: err});
+				}
+				else {
+					res.json(user);
+				}
+			})
+		}
+	})
+}
+
 function remove(req, res) {
 	User.findOneAndRemove({name: req.body.name}, function(err, result) {
 		if(err) {
@@ -157,6 +177,7 @@ module.exports = {
 	newUser: create,
 	profile: profile,
 	login: login,
+	update: update,
 	register: register,
 	remove: remove,
 	verifyToken: verify
