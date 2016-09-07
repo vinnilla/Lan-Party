@@ -21,7 +21,7 @@
 		factory.bullets = [];
 		factory.zombies = [];
 		var frames = 15;
-		var baseNumZombies = 1;
+		var baseNumZombies = 15;
 		var round = 0;
 		var canvas;
 		var ctx;
