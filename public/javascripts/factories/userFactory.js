@@ -170,6 +170,10 @@
 							}
 						})
 						clearInterval(intID);
+						// deduct 2 points from player for spamming 
+						// factory.team.forEach(function() {
+							
+						// })
 					}
 				}, frames)
 			}
