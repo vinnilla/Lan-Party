@@ -168,28 +168,32 @@
 						}
 
 						function spawnZombie() {
+							var one = false;
 							// var y = ((new Date().getTime()) % canvas.height)-100;
 							socket.emit('get-random', canvas.height, factory.room);
 							socket.on('get-random', function(randomHeight) {
-								console.log('hello');
 								var ranNum = Math.floor(Math.random()*10000);
-								// create new zombie
-								var zombie = {id: ranNum, y: randomHeight, x:canvas.width};
-								factory.zombies.push(zombie);
-								// zombie movement
-								var intID = setInterval(function(){
-									// find zombie index
-									var zomIndex;
-									factory.zombies.forEach(function(zombie, index) {
-										if(zombie.id === ranNum) {
-											zomIndex = index;
-										}
-									})
-									// save intID into zombie object
-									factory.zombies[zomIndex].intID = intID;
-									// move zombie left
-									factory.zombies[zomIndex].x -= 2;
-								}, frames)
+
+								if (!one) {
+									// create new zombie
+									var zombie = {id: ranNum, y: randomHeight, x:canvas.width};
+									factory.zombies.push(zombie);
+									// zombie movement
+									var intID = setInterval(function(){
+										// find zombie index
+										var zomIndex;
+										factory.zombies.forEach(function(zombie, index) {
+											if(zombie.id === ranNum) {
+												zomIndex = index;
+											}
+										})
+										// save intID into zombie object
+										factory.zombies[zomIndex].intID = intID;
+										// move zombie left
+										factory.zombies[zomIndex].x -= 2;
+									}, frames)
+									one = true;
+								}
 							})
 							
 						}
