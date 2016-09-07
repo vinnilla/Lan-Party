@@ -18,6 +18,7 @@
 
 		factory.team;
 		factory.bullets = [];
+		factory.zombies = [];
 
 		var r = Math.floor(Math.random()*155)+100;
 		var g = Math.floor(Math.random()*155)+100;
@@ -90,17 +91,17 @@
 					ctx.fillRect(player.x, player.y, 50, 50);
 					// element.css('top', bottom/2);
 				})
+				// spawn zombies
+				setInterval(function() {
+					spawnZombie();
+				}, 1000/team.length)
+
+				// check collsion
+				setInterval(function() {
+					checkCollision();
+				},frames);
 			},200)
 
-			// spawn zombies
-			// setInterval(function() {
-			// 	spawnZombie();
-			// }, 5000-(1000*team.length))
-
-			// check collsion
-			// setInterval(function() {
-			// 	checkCollision();
-			// },frames);
 		})
 
 		socket.on('move-player', function(move) {
@@ -156,9 +157,10 @@
 							bulletIndex = index;
 						}
 					})
+					// add intID to bullet object
+					factory.bullets[bulletIndex].intID = intID;
 					// move bullet right
 					factory.bullets[bulletIndex].x += distancePerTick;
-					drawAll();
 					if (factory.bullets[bulletIndex].x > canvas.width) {
 						// remove bullet from array when boundary is hit
 						factory.bullets = factory.bullets.filter(function(bullet) {
@@ -171,30 +173,6 @@
 				}, frames)
 			}
 			console.log(factory.bullets.length)
-		})
-
-		socket.on('player-slash', function(input) {
-			var ranNum = Math.floor(Math.random()*10000);
-			var distance = 50;
-			var player = $(`#${input.player}-player`);
-			if (input.key === "Space") {
-				// spawn a sword at the player's position
-				var top = `${parseInt(player.css('top'))+20}px`;
-				var left = `${parseInt(player.css('left'))+50}px`;
-				$('<div/>', {
-					id: `${input.player}_melee${ranNum}`,
-					'class': 'melee'
-				}).appendTo('#playing');
-				var weapon = $(`#${input.player}_melee${ranNum}`);
-				weapon.css('top', top);
-				weapon.css('left', left);
-				weapon.css('background-color', input.color);
-				// check collision w/ zombies
-				checkCollisionMelee(weapon);
-				setTimeout(function() {
-					weapon.remove();
-				}, 1000)
-			}
 		})
 
 		socket.on('error', function(data) {
@@ -295,87 +273,72 @@
 			$state.transitionTo('game.home')
 		}
 
-		function getDimensions() {
-			// dimensions of playing field
-			var gameBoard = $(`#playing`);
-			bottom = gameBoard.height();
-			right = gameBoard.width();
-			// console.log(gameBoard, bottom, right);
-		}
-
 		function spawnZombie() {
-			getDimensions();
-			var y = Math.floor(Math.random() * (bottom-100));
+			var y = Math.floor(Math.random() * canvas.height-100);
 			var remainder = y%50;
 			y = 50+y-remainder;
 			var ranNum = Math.floor(Math.random()*10000);
-			$('<div/>', {
-				'class': 'zombie',
-				id: `z-${ranNum}`
-			}).appendTo('#playing')
-			.css('top', y)
-			.css('left', right-50);
-			var zombie = $(`#z-${ranNum}`);
-			var intID = setInterval(function() {
-				var currentPos = parseInt(zombie.css('left'))-1;
-				zombie.css('left', `${currentPos}px`);
+			// create new zombie
+			var zombie = {id: ranNum, y: y, x:canvas.width};
+			factory.zombies.push(zombie);
+			// zombie movement
+			var intID = setInterval(function(){
+				// find zombie index
+				var zomIndex;
+				factory.zombies.forEach(function(zombie, index) {
+					if(zombie.id === ranNum) {
+						zomIndex = index;
+					}
+				})
+				// save intID into zombie object
+				factory.zombies[zomIndex].intID = intID;
+				// move zombie left
+				factory.zombies[zomIndex].x -= 2;
 			}, frames)
 		}
 
-		function checkCollision(bullet, intervalID) {
-			// TODO optimize with nlog(n)
-			// var bullets = $(".bullet");
-			var zombies = $(".zombie");
-			var bulletPos = bullet.position();
-			var bulletID = bullet.attr('id');
-			var playerName = bulletID.substring(0,bulletID.indexOf('_'));
-			// for (var i=0; i< bullets.length; i++) {
-			// 	var bulletPos = $(bullets[i]).position();
-				for (var j=0; j<zombies.length; j++) {
-					var zomPos = $(zombies[j]).position();
-					var zomHeight = $(zombies[j]).height();
-					var zomWidth = $(zombies[j]).width();
-					// check to see if bullet position and zombie position range match
-					if (bulletPos.left > zomPos.left && bulletPos.left < (zomPos.left+zomWidth) &&
-							bulletPos.top > zomPos.top && bulletPos.top < (zomPos.top+zomHeight) ) {
-						clearInterval(intervalID);
-						bullet.remove();
-						$(zombies[j]).remove();
-						factory.team.forEach(function(player) {
-							if(player.name === playerName) {
-								player.score += 5;
-							}
-						})
-						console.log(factory.team[0].score);
+		function checkCollision() {
+			factory.bullets.forEach(function(bullet, bIndex) {
+				factory.zombies.forEach(function(zombie, zIndex) {
+					if (bullet.y > zombie.y && bullet.y < zombie.y+50 &&
+							bullet.x+5 > zombie.x) {
+						// remove from arrays
+						factory.bullets.splice(bIndex, 1);
+						factory.zombies.splice(zIndex, 1);
+						// clear intervals
+						clearInterval(bullet.intID);
+						clearInterval(zombie.intID);
 					}
-				}
-			}
+				})				
+			})
+			drawAll();
+		}
 
-			function checkCollisionMelee(weapon) {
-				var weapon_length = 50
-				var zombies = $('.zombie');
-				var weaponPos = weapon.position();
-				var weaponEnd = weaponPos.left + weapon_length;
-				var weaponID = weapon.attr('id');
-				var playerName = weaponID.substring(0,weaponID.indexOf('_'));
-				for (var j=0; j<zombies.length; j++) {
-					var zomPos = $(zombies[j]).position();
-					var zomHeight = $(zombies[j]).height();
-					var zomWidth = $(zombies[j]).width();
-					// check to see if bullet position and zombie position range match
-					if (weaponEnd > zomPos.left && weaponEnd < (zomPos.left+zomWidth) &&
-							weaponPos.top > zomPos.top && weaponPos.top < (zomPos.top+zomHeight) ) {
-						weapon.remove();
-						$(zombies[j]).remove();
-						factory.team.forEach(function(player) {
-							if(player.name === playerName) {
-								player.score += 5;
-							}
-						})
-						console.log(factory.team[0].score);
-					}
-				}
-			}
+			// function checkCollisionMelee(weapon) {
+			// 	var weapon_length = 50
+			// 	var zombies = $('.zombie');
+			// 	var weaponPos = weapon.position();
+			// 	var weaponEnd = weaponPos.left + weapon_length;
+			// 	var weaponID = weapon.attr('id');
+			// 	var playerName = weaponID.substring(0,weaponID.indexOf('_'));
+			// 	for (var j=0; j<zombies.length; j++) {
+			// 		var zomPos = $(zombies[j]).position();
+			// 		var zomHeight = $(zombies[j]).height();
+			// 		var zomWidth = $(zombies[j]).width();
+			// 		// check to see if bullet position and zombie position range match
+			// 		if (weaponEnd > zomPos.left && weaponEnd < (zomPos.left+zomWidth) &&
+			// 				weaponPos.top > zomPos.top && weaponPos.top < (zomPos.top+zomHeight) ) {
+			// 			weapon.remove();
+			// 			$(zombies[j]).remove();
+			// 			factory.team.forEach(function(player) {
+			// 				if(player.name === playerName) {
+			// 					player.score += 5;
+			// 				}
+			// 			})
+			// 			console.log(factory.team[0].score);
+			// 		}
+			// 	}
+			// }
 
 			// CANVAS FUNCTIONS
 
@@ -384,6 +347,7 @@
 				ctx.clearRect(0,0,canvas.width, canvas.height);
 				drawPlayers();
 				drawBullets();
+				drawZombies();
 			}
 
 			function drawPlayers() {
@@ -397,6 +361,13 @@
 				factory.bullets.forEach(function(bullet) {
 					ctx.fillStyle = bullet.color;
 					ctx.fillRect(bullet.x, bullet.y, 10, 3);
+				})
+			}
+
+			function drawZombies() {
+				factory.zombies.forEach(function(zombie) {
+					ctx.fillStyle = 'green';
+					ctx.fillRect(zombie.x, zombie.y, 50, 50);
 				})
 			}
 
