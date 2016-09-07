@@ -168,11 +168,6 @@ label {
 	top: -2px;
 }
 
-/*CANVAS*/
-canvas {
-	border: 1px red solid;
-}
-
 /*GAME.START.LOBBY*/
 #game-lobby{
 	text-align: center;
