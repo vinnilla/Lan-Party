@@ -120,10 +120,12 @@
 					ctx.fillRect(player.x, player.y, 50, 50);
 				})
 
-				// check collsion
+				var noMoreSpawning = false;
+
+				// check collision
 				var collisionID = setInterval(function() {
 					checkCollision();
-					if (numZombies <= 0 && factory.zombies.length <= 0) {
+					if (noMoreSpawning && factory.zombies.length <= 0) {
 						clearInterval(collisionID);
 						// TODO transition to intermission partial
 						socket.emit('round-end', factory.team, factory.room);
@@ -132,11 +134,13 @@
 				
 				// spawn zombies
 				var spawnID = setInterval(function() {
-					spawnZombie();
-					numZombies--;
 					if (numZombies <= 0) {
+						noMoreSpawning = true;
 						clearInterval(spawnID);
-						console.log('no more zombies');
+						console.log('no more zombies will spawn');
+					} else {
+						spawnZombie();
+						numZombies--;
 					}
 				}, 1000/team.length) // scale spawning with number of players
 
@@ -167,6 +171,7 @@
 							// var y = ((new Date().getTime()) % canvas.height)-100;
 							socket.emit('get-random', canvas.height, factory.room);
 							socket.on('get-random', function(randomHeight) {
+								console.log('hello');
 								var ranNum = Math.floor(Math.random()*10000);
 								// create new zombie
 								var zombie = {id: ranNum, y: randomHeight, x:canvas.width};
