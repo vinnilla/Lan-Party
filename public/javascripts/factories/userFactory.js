@@ -145,7 +145,8 @@
 				var bullet = {id: ranNum,
 											x: factory.team[playerIndex].x,
 											y: factory.team[playerIndex].y+24,
-											color: factory.team[playerIndex].color};
+											color: factory.team[playerIndex].color,
+											owner: factory.team[playerIndex].name};
 				// add bullet to array
 				factory.bullets.push(bullet); 				
 				// set movement
@@ -308,6 +309,12 @@
 						// clear intervals
 						clearInterval(bullet.intID);
 						clearInterval(zombie.intID);
+						// add score to player
+						factory.team.forEach(function(player, pIndex) {
+							if (bullet.owner === player.name) {
+								factory.team[pIndex].score += 5;
+							}
+						})
 					}
 				})				
 			})
@@ -321,6 +328,7 @@
 					}
 				})
 			})
+
 			drawAll();
 		}
 
@@ -364,6 +372,8 @@
 				factory.team.forEach(function(player) {
 					ctx.fillStyle = player.color;
 					ctx.fillRect(player.x, player.y, 50, 50);
+					ctx.font = '24px serif';
+					ctx.strokeText(player.score, player.x+10, player.y+30)
 				})
 			}
 
