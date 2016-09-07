@@ -21,12 +21,13 @@
 		factory.bullets = [];
 		factory.zombies = [];
 		var frames = 15;
-		var baseNumZombies = 15;
+		var baseNumZombies = 1;
 		var round = 0;
 		var canvas;
 		var ctx;
 
 		var collisionID;
+		var startOnce = false;
 
 		var r = Math.floor(Math.random()*155)+100;
 		var g = Math.floor(Math.random()*155)+100;
@@ -39,6 +40,10 @@
 		})
 
 		socket.on('connect-room', function(data) {
+			if (data.room[0].name === factory.name) {
+				console.log('leader');
+				factory.leader = true;
+			}
 			factory.team = data.room;
 			$rootScope.$broadcast('newPlayers');
 			$state.transitionTo('game.start.lobby');
@@ -77,6 +82,7 @@
 				document.removeEventListener('keydown', shoot);
 				factory.message = `END OF ROUND ${round}`;
 				$rootScope.$broadcast('refresh');
+				startOnce = false;
 
 				setTimeout(function() {
 					document.removeEventListener('keydown', movement);
@@ -110,6 +116,8 @@
 
 		// ---| GAME LOGIC |--- \\
 		socket.on('start-game', function(team) {
+			console.log(startOnce);
+			if (!startOnce) {
 			// movement
 			document.addEventListener('keydown', movement)
 			// shooting
@@ -169,7 +177,9 @@
 				}, 1000/team.length) // scale spawning with number of players
 
 			},1000)// end of setTimeout
+			}// end of startOnce if statement
 
+			startOnce = true;
 		})
 						function movement(e) {
 							if (e.keyCode === 87 || e.keyCode === 68 || e.keyCode === 83 || e.keyCode === 65) {
