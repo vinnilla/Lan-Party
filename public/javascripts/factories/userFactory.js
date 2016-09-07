@@ -28,6 +28,7 @@
 
 		var collisionID;
 		var startOnce = false;
+		var scaling = 1;
 
 		var r = Math.floor(Math.random()*155)+100;
 		var g = Math.floor(Math.random()*155)+100;
@@ -154,6 +155,12 @@
 
 				var noMoreSpawning = false;
 
+				// scale the zombie spawns
+				setInterval(function() {
+					console.log('scaling increases');
+					scaling += 0.5;
+				}, 10000)
+
 				// check collision
 				collisionID = setInterval(function() {
 					checkCollision();
@@ -172,9 +179,9 @@
 						console.log('no more zombies will spawn');
 					} else {
 						spawnZombie();
-						numZombies--;
+						// numZombies--;
 					}
-				}, 1000/team.length) // scale spawning with number of players
+				}, 1000/team.length/scaling) // scale spawning with number of players
 
 			},1000)// end of setTimeout
 			}// end of startOnce if statement
