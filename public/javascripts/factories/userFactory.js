@@ -140,7 +140,7 @@
 					}
 				}, 1000/team.length) // scale spawning with number of players
 
-			},200)// end of setTimeout
+			},1000)// end of setTimeout
 
 		})
 						function movement(e) {
