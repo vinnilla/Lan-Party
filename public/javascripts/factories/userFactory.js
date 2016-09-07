@@ -21,10 +21,12 @@
 		factory.bullets = [];
 		factory.zombies = [];
 		var frames = 15;
-		var baseNumZombies = 1;
+		var baseNumZombies = 15;
 		var round = 0;
 		var canvas;
 		var ctx;
+
+		var collisionID;
 
 		var r = Math.floor(Math.random()*155)+100;
 		var g = Math.floor(Math.random()*155)+100;
@@ -49,11 +51,7 @@
 		})
 
 		// ---| INTERMISSION LOGIC |--- \\
-		socket.on('round-end', function(team) {
-			document.removeEventListener('keydown', shoot);
-			factory.message = `END OF ROUND ${round}`;
-			$rootScope.$broadcast('refresh');
-
+		socket.on('round-end', function(team, status) {
 			// convert points to exp and save to backend
 			factory.team.forEach(function(player) {
 				// 5 xp/point
@@ -75,14 +73,40 @@
 				})
 			})
 
-			setTimeout(function() {
-				document.removeEventListener('keydown', movement);
-				factory.message = `STARTING ROUND ${round+1}`;
+			if (status === 'victory') {
+				document.removeEventListener('keydown', shoot);
+				factory.message = `END OF ROUND ${round}`;
 				$rootScope.$broadcast('refresh');
-				// start round
-				socket.emit('start-game', team, factory.room);
-			},5000)
+
+				setTimeout(function() {
+					document.removeEventListener('keydown', movement);
+					factory.message = `STARTING ROUND ${round+1}`;
+					$rootScope.$broadcast('refresh');
+					// start round
+					socket.emit('start-game', team, factory.room);
+				},5000)
+			}
+			else if (status === 'failure') {
+				factory.message = `YOU LOST!`;
+				$rootScope.$broadcast('refresh');
+				roundEnd();
+
+				setTimeout(function() {
+					factory.message = '';
+					$state.go('game.start.lobby');
+				},3000);
+			}
 		})
+
+						function roundEnd() {
+							clearInterval(collisionID);
+							factory.zombies.forEach(function(zombie, zIndex) {
+								clearInterval(zombie.intID);
+							})
+							round = 0;
+							factory.zombies = [];
+							factory.bullets = [];
+						}
 
 		// ---| GAME LOGIC |--- \\
 		socket.on('start-game', function(team) {
@@ -123,12 +147,12 @@
 				var noMoreSpawning = false;
 
 				// check collision
-				var collisionID = setInterval(function() {
+				collisionID = setInterval(function() {
 					checkCollision();
 					if (noMoreSpawning && factory.zombies.length <= 0) {
 						clearInterval(collisionID);
 						// TODO transition to intermission partial
-						socket.emit('round-end', factory.team, factory.room);
+						socket.emit('round-end', factory.team, factory.room, 'victory');
 					}
 				},frames);
 				
@@ -191,6 +215,15 @@
 										factory.zombies[zomIndex].intID = intID;
 										// move zombie left
 										factory.zombies[zomIndex].x -= 2;
+
+										// check zombie collision with left border
+										if (factory.zombies[zomIndex].x <= 0) {
+											console.log('zombie has reached the house!');
+											factory.zombies.splice(zomIndex, 1);
+											clearInterval(intID);
+											// LOST
+											socket.emit('round-end', factory.team, factory.room, 'failure');
+										}
 									}, frames)
 									one = true;
 								}
