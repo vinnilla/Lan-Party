@@ -52,8 +52,8 @@ io.on('connection', function(socket) {
 		io.to(room).emit('player-shoot', shoot);
 	})
 
-	socket.on('round-end', function(team, room) {
-		io.to(room).emit('round-end', team);
+	socket.on('round-end', function(team, room, status) {
+		io.to(room).emit('round-end', team, status);
 	})
 
 	socket.on('get-random', function(height, room) {
