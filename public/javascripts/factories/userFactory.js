@@ -21,6 +21,8 @@
 		factory.bullets = [];
 		factory.zombies = [];
 		var frames = 15;
+		var baseNumZombies = 15;
+		var round = 0;
 		var canvas;
 		var ctx;
 
@@ -35,34 +37,53 @@
 		})
 
 		socket.on('connect-room', function(data) {
-			factory.room = data.room;
+			factory.team = data.room;
 			$rootScope.$broadcast('newPlayers');
 			$state.transitionTo('game.start.lobby');
 			setTimeout(function() {
-			factory.room.forEach(function(player) {
+			data.room.forEach(function(player) {
 				var name = $(`#${player.name}-name`).css('color', player.color);
 				var image = $(`#${player.name}-image`).css('background-color', player.color);
 			})
 			},500)
 		})
 
+		// ---| INTERMISSION LOGIC |--- \\
+		socket.on('round-end', function(team) {
+			document.removeEventListener('keydown', shoot);
+			factory.message = `END OF ROUND ${round}`;
+			$rootScope.$broadcast('refresh');
+			setTimeout(function() {
+				document.removeEventListener('keydown', movement);
+				factory.message = `STARTING ROUND ${round+1}`;
+				$rootScope.$broadcast('refresh');
+
+				// TODO TODO TODO convert points to exp and save to backend
+
+				// start round
+				socket.emit('start-game', team, factory.room);
+			},5000)
+		})
+
 		// ---| GAME LOGIC |--- \\
 		socket.on('start-game', function(team) {
 			// movement
-			document.addEventListener('keydown', function(e) {
-				if (e.keyCode === 87 || e.keyCode === 68 || e.keyCode === 83 || e.keyCode === 65) {
-					factory.sendMovement(e.key);
-				}
-			})
+			document.addEventListener('keydown', movement)
 			// shooting
-			document.addEventListener('keydown', function(e) {
-				if (e.keyCode === 32) {
-					factory.sendShot(e.code); //code = "Space"
-				}
-			})
+			document.addEventListener('keydown', shoot)
 			$state.transitionTo('game.start.playing');
 
+			round++;
+			factory.message = `STARTING ROUND ${round}`;
+			$rootScope.$broadcast('refresh');
 			factory.team = team;
+			var numZombies = baseNumZombies * round * factory.team.length;
+
+			// clear message
+			setTimeout(function() {
+				factory.message = '';
+				$rootScope.$broadcast('refresh');
+			}, 2000)
 
 			setTimeout(function() {
 				// set canvas up
@@ -79,24 +100,48 @@
 					ctx.fillStyle = player.color;
 					ctx.fillRect(player.x, player.y, 50, 50);
 				})
-				// spawn zombies
-				setInterval(function() {
-					spawnZombie();
-				}, 1000/team.length) // scale spawning with number of players
 
 				// check collsion
-				setInterval(function() {
+				var collisionID = setInterval(function() {
 					checkCollision();
+					if (numZombies <= 0 && factory.zombies.length <= 0) {
+						clearInterval(collisionID);
+						// TODO transition to intermission partial
+						socket.emit('round-end', factory.team, factory.room);
+					}
 				},frames);
-			},200)
+				
+				// spawn zombies
+				var spawnID = setInterval(function() {
+					spawnZombie();
+					numZombies--;
+					if (numZombies <= 0) {
+						clearInterval(spawnID);
+						console.log('no more zombies');
+					}
+				}, 1000/team.length) // scale spawning with number of players
+
+			},200)// end of setTimeout
+
 		})
+						function movement(e) {
+							if (e.keyCode === 87 || e.keyCode === 68 || e.keyCode === 83 || e.keyCode === 65) {
+								factory.sendMovement(e.key);
+							}
+						}
+
+						function shoot(e) {
+							if (e.keyCode === 32) {
+								factory.sendShot(e.code); //code = "Space"
+							}
+						}
 
 						factory.sendMovement = function(key) {
-							socket.emit('move-player', {player:factory.name, key: key});
+							socket.emit('move-player', {player:factory.name, key: key}, factory.room);
 						}
 
 						factory.sendShot = function(key) {
-							socket.emit('player-shoot', {player:factory.name, key: key, color: randomColor});
+							socket.emit('player-shoot', {player:factory.name, key: key, color: randomColor}, factory.room);
 						}
 
 						function spawnZombie() {
@@ -349,15 +394,16 @@
 		}
 
 		factory.getTeam = function() {
-			return factory.room;
+			return factory.team;
 		}
 
 		factory.joinRoom = function(name) {
+			factory.room = name;
 			socket.emit('join-room', {roomName: name});
 		}
 
 		factory.startGame = function() {
-			socket.emit('start-game', factory.room);
+			socket.emit('start-game', factory.team, factory.room);
 		}
 
 		return factory;

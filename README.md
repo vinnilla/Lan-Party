@@ -13,7 +13,9 @@ Socket.io is used to create the multiplayer aspect of the game. Players can play
 Main landing page allows users to register or login to a pre-existing account.
 Once registered/logged in, the users are sent to the main game screen where they are presented with the option to start the game solo, or join a room to play cooperatively.
 	If co-op is selected, users can type in the name of the room to join (if no room exists, a new room is created.) Only 4 players can play together.
-	The game progresses in waves until the team eventually succumbs to the neverending horde of zombies.
+
+##### Game Design:
+The game progresses in waves until the player/team eventually succumbs to the neverending horde of zombies.
 
 ##### Front-End Angular Routes:
 Route | Description

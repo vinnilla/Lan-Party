@@ -177,6 +177,11 @@ label {
 }
 
 /*GAME.START.PLAYING*/
+#message {
+	height: 0px;
+	margin: 0;
+	text-align:center;
+}
 #playing {
 	/*background-color: rgba(255, 60, 20, 0.5);*/
 	width: 100%;

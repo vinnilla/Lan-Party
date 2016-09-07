@@ -67,12 +67,16 @@
 		})
 
 		$rootScope.$on('newPlayers', function() {
-			$scope.team = userData.room;
+			$scope.team = userData.team;
 			$scope.$apply();
 		})
 
 		$rootScope.$on('startGame', function() {
 			$scope.team = userData.team;
+			$scope.$apply();
+		})
+
+		$rootScope.$on('refresh', function() {
 			$scope.$apply();
 		})
 

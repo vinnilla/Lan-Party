@@ -39,17 +39,21 @@ io.on('connection', function(socket) {
 		console.log(rooms);
 	})// end of on join-room
 
-	socket.on('start-game', function(team) {
+	socket.on('start-game', function(team, room) {
 		console.log(team);
-		io.to(player.room).emit('start-game', team);
+		io.to(room).emit('start-game', team);
 	})// end of on start-game
 
-	socket.on('move-player', function(move) {
-		io.to(player.room).emit('move-player', move);
+	socket.on('move-player', function(move, room) {
+		io.to(room).emit('move-player', move);
 	})
 
-	socket.on('player-shoot', function(shoot) {
-		io.to(player.room).emit('player-shoot', shoot);
+	socket.on('player-shoot', function(shoot, room) {
+		io.to(room).emit('player-shoot', shoot);
+	})
+
+	socket.on('round-end', function(team, room) {
+		io.to(room).emit('round-end', team);
 	})
 
 	socket.on('disconnect', function() {
