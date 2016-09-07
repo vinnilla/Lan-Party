@@ -27,6 +27,8 @@
 		var ctx;
 
 		var collisionID;
+		var scaleID;
+		var spawnID;
 		var startOnce = false;
 		var scaling = 1;
 
@@ -110,6 +112,9 @@
 							factory.zombies.forEach(function(zombie, zIndex) {
 								clearInterval(zombie.intID);
 							})
+							clearInterval(collisionID);
+							clearInterval(spawnID);
+							clearInterval(scaleID);
 							round = 0;
 							factory.zombies = [];
 							factory.bullets = [];
@@ -156,7 +161,7 @@
 				var noMoreSpawning = false;
 
 				// scale the zombie spawns
-				setInterval(function() {
+				scaleID = setInterval(function() {
 					console.log('scaling increases');
 					scaling += 0.5;
 				}, 10000)
@@ -172,7 +177,7 @@
 				},frames);
 				
 				// spawn zombies
-				var spawnID = setInterval(function() {
+			 	spawnID = setInterval(function() {
 					if (numZombies <= 0) {
 						noMoreSpawning = true;
 						clearInterval(spawnID);
