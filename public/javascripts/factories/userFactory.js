@@ -278,9 +278,12 @@
 		}
 
 		function spawnZombie() {
-			var y = Math.floor(Math.random() * canvas.height-100);
+			// console.log(new Date().getTime());
+			// var y = Math.floor(Math.random() * canvas.height-100);
+			var y = ((new Date().getTime()) % canvas.height)-100;
 			var remainder = y%50;
 			y = 50+y-remainder;
+			console.log(y);
 			var ranNum = Math.floor(Math.random()*10000);
 			// create new zombie
 			var zombie = {id: ranNum, y: y, x:canvas.width};
