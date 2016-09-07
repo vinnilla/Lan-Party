@@ -1,6 +1,7 @@
-#LAN PARTY
+#[LAN PARTY](http://lan-party.herokuapp.com "Lan Party");
 
 ### A real-time co-op combat based game using socket.io
+
 
 ##### MEAN Stack:
 Mongo is used to store account information (username and password) as well as character information associated with the account.
