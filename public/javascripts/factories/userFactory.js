@@ -532,8 +532,8 @@
 		factory.startGame = function() {
 			var test = true;
 			factory.team.forEach(function(player) {
-				// console.log(player);
 				if (!player.ready) {
+					console.log(player);
 					test = false;
 				}
 			})
@@ -541,6 +541,15 @@
 				socket.emit('start-game', factory.team, factory.room);
 			}
 		}
+
+		factory.updatePlayer = function() {
+			socket.emit('relay-team', factory.team, factory.room);
+		}
+
+		socket.on('relay-team', function(team) {
+			factory.team = team;
+			console.log(factory.team);
+		})
 
 		return factory;
 	}

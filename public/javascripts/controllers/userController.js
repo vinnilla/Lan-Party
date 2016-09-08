@@ -96,6 +96,7 @@
 						player.stats[stat.name] = stat.value;
 					})
 					player.ready = true;
+					$scope.userData.updatePlayer();
 					// $scope.$apply();
 				}
 			})

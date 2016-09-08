@@ -179,7 +179,7 @@ label {
 	text-align: center;
 }
 #start-round {
-	margin-top: 30vh;
+	margin-top: 20vh;
 }
 #game-lobby h3 {
 	margin-bottom: 100px;
@@ -190,7 +190,10 @@ label {
 #upgrade-options h5, #upgrade-options h6 {
 	display:inline;
 }
-
+#ready-button {
+	margin-top: 50px;
+}
+ 
 /*GAME.START.PLAYING*/
 #message {
 	height: 0px;

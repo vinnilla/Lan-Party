@@ -66,6 +66,10 @@ io.on('connection', function(socket) {
 		io.to(room).emit('get-random', y);
 	})
 
+	socket.on('relay-team', function(team, room) {
+		io.to(room).emit('relay-team', team);
+	})
+
 	socket.on('disconnect', function() {
 		//disconnect player from room
 		if (player) {
