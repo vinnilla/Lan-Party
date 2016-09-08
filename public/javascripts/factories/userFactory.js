@@ -341,7 +341,7 @@
 			factory.team[playerIndex].bullets = "..."
 			setTimeout(function() {
 				factory.team[playerIndex].bullets = 12;
-			}, 2000)
+			}, 1000)
 		})
 
 		socket.on('player-shoot', function(input) {
