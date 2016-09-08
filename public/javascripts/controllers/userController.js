@@ -60,7 +60,7 @@
 							$scope.player.stats = player.stats;
 						}
 					})
-					console.log($scope.player);
+					// console.log($scope.player);
 				}
 			})
 		})
