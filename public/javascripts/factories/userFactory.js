@@ -246,14 +246,6 @@
 										zombie.intID = intID;
 										// move zombie left
 										zombie.x -= 2*scaling;
-										// check zombie and left border collision
-										if (zombie.x <= 0) {
-											console.warn('zombie has reached the house!');
-											//LOST
-											if (factory.leader) { // prevent desync loss (remove if desync is extreme)
-												socket.emit('round-end', factory.team, factory.room, 'failure');
-											}
-										}
 									}, frames)
 									one = true;
 									factory.zombies.push(zombie);
@@ -293,6 +285,17 @@
 										factory.team[pIndex].alive = false;
 									}
 								})
+							})
+
+							// zombie and left border collision
+							factory.zombies.forEach(function(zombie) {
+								if(zombie.x <= 0) {
+									console.warn('zombie has reached the house!');
+									//LOST
+									if (factory.leader) { // prevent desync loss (remove if desync is extreme)
+										socket.emit('round-end', factory.team, factory.room, 'failure');
+									}
+								}
 							})
 
 							drawAll();
