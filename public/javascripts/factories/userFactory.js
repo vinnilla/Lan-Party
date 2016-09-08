@@ -239,31 +239,21 @@
 								if (!one) {
 									// create new zombie
 									var zombie = {id: ranNum, y: randomHeight, x:canvas.width};
-									factory.zombies.push(zombie);
 									// zombie movement
 									var intID = setInterval(function(){
-										// find zombie index
-										var zomIndex;
-										factory.zombies.forEach(function(zombie, index) {
-											if(zombie.id === ranNum) {
-												zomIndex = index;
-											}
-										})
 										// save intID into zombie object
-										factory.zombies[zomIndex].intID = intID;
+										zombie.intID = intID;
 										// move zombie left
-										factory.zombies[zomIndex].x -= 2*scaling;
-
-										// check zombie collision with left border
-										if (factory.zombies[zomIndex].x <= 0) {
-											console.log('zombie has reached the house!');
-											factory.zombies.splice(zomIndex, 1);
-											clearInterval(intID);
-											// LOST
+										zombie.x -= 2*scaling;
+										// check zombie and left border collision
+										if (zombie.x <= 0) {
+											console.warn('zombie has reached the house!');
+											//LOST
 											socket.emit('round-end', factory.team, factory.room, 'failure');
 										}
 									}, frames)
 									one = true;
+									factory.zombies.push(zombie);
 								}
 							})
 							
@@ -349,40 +339,34 @@
 						color: factory.team[playerIndex].color,
 						owner: factory.team[playerIndex].name
 					};
-				// add bullet to array
-				factory.bullets.push(bullet); 				
+						
 				// set up movement
 				var intID = setInterval(function() {
-					// store bullet index
-					var bulletIndex;
-					factory.bullets.forEach(function(bullet, index) {
-						if (bullet.id === ranNum) {
-							bulletIndex = index;
-						}
-					})
-					if (bulletIndex) {
-						// add intID to bullet object
-						factory.bullets[bulletIndex].intID = intID;
-						// move bullet right
-						factory.bullets[bulletIndex].x += distancePerTick;
-						// check if bullet has reached the edge of the canvas
-						if (factory.bullets[bulletIndex].x > canvas.width) {
-							// deduct 2 points from player for spamming 
-							factory.team.forEach(function(player, pIndex) {
-								if (factory.bullets[bulletIndex].owner === player.name) {
-									factory.team[pIndex].score -= 2;
-								}
-							})
-							// remove bullet from array
-							factory.bullets = factory.bullets.filter(function(bullet) {
-								if (bullet.id != ranNum) {
-									return bullet;
-								}
-							})
-							clearInterval(intID);
-						}// end of edge of canvas check
-					}// end of if bulletIndex
+					// add intID to bullet object
+					bullet.intID = intID;
+					// move bullet right
+					bullet.x += distancePerTick;
+
+					// check if bullet has reached the edge of the canvas
+					if (bullet.x > canvas.width) {
+						// deduct two points from player if bullet does not hit a zombie
+						factory.team.forEach(function(player, pIndex) {
+							if (bullet.owner === player.name) {
+								factory.team[pIndex].score -= 2;
+							}
+						})
+						// remove bullet from array
+						factory.bullets = factory.bullets.filter(function(bullet) {
+							if(bullet.id != ranNum) {
+								return bullet;
+							}
+						})
+						clearInterval(intID);
+					}// end of canvas edge check
+
 				}, frames)
+				// add bullet to array
+				factory.bullets.push(bullet);
 			}
 		})
 
