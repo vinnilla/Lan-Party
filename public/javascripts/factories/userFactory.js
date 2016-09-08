@@ -109,12 +109,11 @@
 
 						function roundEnd() {
 							clearInterval(collisionID);
+							clearInterval(spawnID);
+							clearInterval(scaleID);
 							factory.zombies.forEach(function(zombie, zIndex) {
 								clearInterval(zombie.intID);
 							})
-							clearInterval(collisionID);
-							clearInterval(spawnID);
-							clearInterval(scaleID);
 							round = 0;
 							factory.zombies = [];
 							factory.bullets = [];
@@ -153,6 +152,7 @@
 				ctx.canvas.height = border.height()*0.9;
 				// initialize team
 				factory.team.forEach(function(player) {
+					player.alive = true;
 					player.score = 0;
 					player.x = 50;
 					player.y = 300;
@@ -219,7 +219,9 @@
 						function spawnZombie() {
 							var one = false;
 							// var y = ((new Date().getTime()) % canvas.height)-100;
-							socket.emit('get-random', canvas.height, factory.room);
+							if (factory.leader) {
+								socket.emit('get-random', canvas.height, factory.room);
+							}
 							socket.on('get-random', function(randomHeight) {
 								var ranNum = Math.floor(Math.random()*10000);
 
@@ -283,7 +285,7 @@
 								factory.zombies.forEach(function(zombie) {
 									if (player.x+25 > zombie.x && player.x+25 < zombie.x+50 &&
 											player.y+25 > zombie.y && player.y+25 < zombie.y+50) {
-										factory.team.splice(pIndex,1);
+										factory.team[pIndex].alive = false;
 									}
 								})
 							})
@@ -382,10 +384,12 @@
 
 		function drawPlayers() {
 			factory.team.forEach(function(player) {
-				ctx.fillStyle = player.color;
-				ctx.fillRect(player.x, player.y, 50, 50);
-				ctx.font = '24px serif';
-				ctx.strokeText(player.score, player.x+5, player.y+30)
+				if (player.alive) {
+					ctx.fillStyle = player.color;
+					ctx.fillRect(player.x, player.y, 50, 50);
+					ctx.font = '24px serif';
+					ctx.strokeText(player.score, player.x+5, player.y+30)
+				}
 			})
 		}
 
