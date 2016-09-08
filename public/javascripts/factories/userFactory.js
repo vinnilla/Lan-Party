@@ -113,13 +113,13 @@
 							clearInterval(spawnID);
 							clearInterval(scaleID);
 							factory.zombies.forEach(function(zombie, zIndex) {
-								console.info('deleting zombie')
+								// console.info('deleting zombie')
 								clearInterval(zombie.intID);
 							})
 							// round = 0;
 							factory.zombies = [];
 							factory.bullets.forEach(function(bullet) {
-								console.info('deleting bullet')
+								// console.info('deleting bullet')
 								clearInterval(bullet.intID);
 							})
 							factory.bullets = [];
@@ -295,7 +295,7 @@
 							// zombie and left border collision
 							factory.zombies.forEach(function(zombie) {
 								if(zombie.x <= 0) {
-									console.warn('zombie has reached the house!');
+									// console.warn('zombie has reached the house!');
 									//LOST
 									if (factory.leader) { // prevent desync loss (remove if desync is extreme)
 										socket.emit('round-end', factory.team, factory.room, 'failure');
