@@ -118,6 +118,8 @@
 							round = 0;
 							factory.zombies = [];
 							factory.bullets = [];
+							startOnce = false;
+							scaling = 1;
 						}
 
 		// ---| GAME LOGIC |--- \\
@@ -131,7 +133,7 @@
 			$state.transitionTo('game.start.playing');
 
 			round++;
-			factory.message = `STARTING ROUND ${round}`;
+			factory.message = `STARTING`;
 			$rootScope.$broadcast('refresh');
 			factory.team = team;
 			var numZombies = baseNumZombies * round * factory.team.length;
@@ -164,6 +166,7 @@
 				scaleID = setInterval(function() {
 					console.log('scaling increases');
 					scaling += 0.5;
+					console.log(scaling);
 				}, 10000)
 
 				// check collision
@@ -186,7 +189,7 @@
 						spawnZombie();
 						// numZombies--;
 					}
-				}, 1000/team.length/scaling) // scale spawning with number of players
+				}, 1000/team.length) // scale spawning with number of players
 
 			},1000)// end of setTimeout
 			}// end of startOnce if statement
@@ -236,7 +239,7 @@
 										// save intID into zombie object
 										factory.zombies[zomIndex].intID = intID;
 										// move zombie left
-										factory.zombies[zomIndex].x -= 2;
+										factory.zombies[zomIndex].x -= 2*scaling;
 
 										// check zombie collision with left border
 										if (factory.zombies[zomIndex].x <= 0) {
