@@ -70,7 +70,7 @@
 					exp: exp
 				})
 				.then(function(response) {
-					console.log(response);
+					// console.log(response);
 					if (response.data.error) {
 						console.log(response.data.error)
 					}
@@ -96,6 +96,8 @@
 				},5000)
 			}
 			else if (status === 'failure') {
+				document.removeEventListener('keydown', shoot);
+				document.removeEventListener('keydown', movement);
 				factory.message = `YOU LOST!`;
 				$rootScope.$broadcast('refresh');
 				roundEnd();
@@ -112,7 +114,12 @@
 							clearInterval(spawnID);
 							clearInterval(scaleID);
 							factory.zombies.forEach(function(zombie, zIndex) {
+								console.info('deleting zombie')
 								clearInterval(zombie.intID);
+							})
+							factory.bullets.forEach(function(bullet) {
+								console.info('deleting bullet')
+								clearInterval(bullet.intID);
 							})
 							round = 0;
 							factory.zombies = [];
@@ -164,13 +171,14 @@
 
 				// scale the zombie spawns
 				scaleID = setInterval(function() {
-					console.log('scaling increases');
+					console.info('scaling increases');
 					scaling += 0.5;
 					console.log(scaling);
 				}, 10000)
 
 				// check collision
 				collisionID = setInterval(function() {
+					// console.info('collision');
 					checkCollision();
 					if (noMoreSpawning && factory.zombies.length <= 0) {
 						clearInterval(collisionID);
@@ -181,6 +189,7 @@
 				
 				// spawn zombies
 			 	spawnID = setInterval(function() {
+			 		// console.info('spawning');
 					if (numZombies <= 0) {
 						noMoreSpawning = true;
 						clearInterval(spawnID);
@@ -219,6 +228,8 @@
 						function spawnZombie() {
 							var one = false;
 							// var y = ((new Date().getTime()) % canvas.height)-100;
+
+							// only the leader will ask server to generate random spawn point
 							if (factory.leader) {
 								socket.emit('get-random', canvas.height, factory.room);
 							}
