@@ -83,13 +83,12 @@
 			})
 
 			if (status === 'victory') {
-				document.removeEventListener('keydown', shoot);
+				document.removeEventListener('keydown', userInput);
 				factory.message = `END OF ROUND ${round}`;
 				$rootScope.$broadcast('refresh');
 				startOnce = false;
 
 				setTimeout(function() {
-					document.removeEventListener('keydown', movement);
 					factory.message = `STARTING ROUND ${round+1}`;
 					$rootScope.$broadcast('refresh');
 					// start round
@@ -97,8 +96,7 @@
 				},5000)
 			}
 			else if (status === 'failure') {
-				document.removeEventListener('keydown', shoot);
-				document.removeEventListener('keydown', movement);
+				document.removeEventListener('keydown', userInput);
 				factory.message = `YOU LOST!`;
 				$rootScope.$broadcast('refresh');
 				roundEnd();
@@ -133,10 +131,8 @@
 		socket.on('start-game', function(team) {
 			console.log(startOnce);
 			if (!startOnce) {
-			// movement
-			document.addEventListener('keydown', movement)
-			// shooting
-			document.addEventListener('keydown', shoot)
+			// movement | shooting | reload
+			document.addEventListener('keydown', userInput)
 			$state.transitionTo('game.start.playing');
 
 			// round++;
@@ -162,6 +158,7 @@
 				factory.team.forEach(function(player) {
 					player.alive = true;
 					player.score = 0;
+					player.bullets = 12;
 					player.x = 50;
 					player.y = 300;
 					ctx.fillStyle = player.color;
@@ -206,15 +203,15 @@
 
 			startOnce = true;
 		})
-						function movement(e) {
+						function userInput(e) {
 							if (e.keyCode === 87 || e.keyCode === 68 || e.keyCode === 83 || e.keyCode === 65) {
 								factory.sendMovement(e.key);
 							}
-						}
-
-						function shoot(e) {
-							if (e.keyCode === 32) {
+							else if (e.keyCode === 32) {
 								factory.sendShot(e.code); //code = "Space"
+							}
+							else if (e.keyCode === 82) {
+								factory.sendReload(e.key);
 							}
 						}
 
@@ -224,6 +221,10 @@
 
 						factory.sendShot = function(key) {
 							socket.emit('player-shoot', {player:factory.name, key: key, color: randomColor}, factory.room);
+						}
+
+						factory.sendReload = function(key) {
+							socket.emit('player-reload', {player:factory.name, key:key}, factory.room);
 						}
 
 						function spawnZombie() {
@@ -326,6 +327,19 @@
 			drawAll();
 		})
 
+		socket.on('player-reload', function(reload) {
+			var playerIndex;
+			factory.team.forEach(function(player, index) {
+				if(player.name === reload.player) {
+					playerIndex = index;
+				}
+			})
+			factory.team[playerIndex].bullets = "..."
+			setTimeout(function() {
+				factory.team[playerIndex].bullets = 12;
+			}, 2000)
+		})
+
 		socket.on('player-shoot', function(input) {
 			var playerIndex;
 			// find player that moved
@@ -338,42 +352,51 @@
 			// check input
 			if (input.key === 'Space') {
 				var ranNum = Math.floor(Math.random()*10000);
-				// create projectile object
-				var bullet = 
-					{id: ranNum,
-						x: factory.team[playerIndex].x,
-						y: factory.team[playerIndex].y+24,
-						color: factory.team[playerIndex].color,
-						owner: factory.team[playerIndex].name
-					};
-						
-				// set up movement
-				var intID = setInterval(function() {
-					// add intID to bullet object
-					bullet.intID = intID;
-					// move bullet right
-					bullet.x += distancePerTick;
 
-					// check if bullet has reached the edge of the canvas
-					if (bullet.x > canvas.width) {
-						// deduct two points from player if bullet does not hit a zombie
-						factory.team.forEach(function(player, pIndex) {
-							if (bullet.owner === player.name) {
-								factory.team[pIndex].score -= 2;
-							}
-						})
-						// remove bullet from array
-						factory.bullets = factory.bullets.filter(function(bullet) {
-							if(bullet.id != ranNum) {
-								return bullet;
-							}
-						})
-						clearInterval(intID);
-					}// end of canvas edge check
+				if (factory.team[playerIndex].bullets > 0 || factory.team[playerIndex].bullets != "...") {
+					// create projectile object
+					var bullet = 
+						{id: ranNum,
+							x: factory.team[playerIndex].x,
+							y: factory.team[playerIndex].y+24,
+							color: factory.team[playerIndex].color,
+							owner: factory.team[playerIndex].name
+						};
 
-				}, frames)
-				// add bullet to array
-				factory.bullets.push(bullet);
+					factory.team[playerIndex].bullets--;
+							
+					// set up movement
+					var intID = setInterval(function() {
+						// add intID to bullet object
+						bullet.intID = intID;
+						// move bullet right
+						bullet.x += distancePerTick;
+
+						// check if bullet has reached the edge of the canvas
+						if (bullet.x > canvas.width) {
+							// deduct two points from player if bullet does not hit a zombie
+							factory.team.forEach(function(player, pIndex) {
+								if (bullet.owner === player.name) {
+									factory.team[pIndex].score -= 2;
+								}
+							})
+							// remove bullet from array
+							factory.bullets = factory.bullets.filter(function(bullet) {
+								if(bullet.id != ranNum) {
+									return bullet;
+								}
+							})
+							clearInterval(intID);
+						}// end of canvas edge check
+
+					}, frames)
+					// add bullet to array
+					factory.bullets.push(bullet);
+				}// end of checking if player has bullets
+				// else {
+				// 	// initialize reload
+				// 	reload(playerIndex)
+				// }
 			}
 		})
 
@@ -392,7 +415,7 @@
 					ctx.fillStyle = player.color;
 					ctx.fillRect(player.x, player.y, 50, 50);
 					ctx.font = '24px serif';
-					ctx.strokeText(player.score, player.x+5, player.y+30)
+					ctx.strokeText(player.bullets, player.x+5, player.y+30)
 				}
 			})
 		}

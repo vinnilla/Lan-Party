@@ -52,6 +52,10 @@ io.on('connection', function(socket) {
 		io.to(room).emit('player-shoot', shoot);
 	})
 
+	socket.on('player-reload', function(reload, room) {
+		io.to(room).emit('player-reload', reload);
+	})
+
 	socket.on('round-end', function(team, room, status) {
 		io.to(room).emit('round-end', team, status);
 	})

@@ -147,7 +147,7 @@ label {
 }
 .team-display {
 	margin-left: 2vw;
-	display: flex;
+	display: inline-block;
 	position: relative;
 	z-index: 2;
 	margin-top: 10px;
