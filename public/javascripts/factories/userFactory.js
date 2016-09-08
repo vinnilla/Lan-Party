@@ -22,7 +22,7 @@
 		factory.zombies = [];
 		var frames = 15;
 		var baseNumZombies = 1;
-		var round = 0;
+		// var round = 0;
 		var canvas;
 		var ctx;
 
@@ -54,6 +54,7 @@
 			data.room.forEach(function(player) {
 				var name = $(`#${player.name}-name`).css('color', player.color);
 				var image = $(`#${player.name}-image`).css('background-color', player.color);
+				var score = $(`#${player.name}-score`).css('color', player.color);
 			})
 			},500)
 		})
@@ -117,7 +118,7 @@
 								console.info('deleting zombie')
 								clearInterval(zombie.intID);
 							})
-							round = 0;
+							// round = 0;
 							factory.zombies = [];
 							factory.bullets.forEach(function(bullet) {
 								console.info('deleting bullet')
@@ -138,11 +139,11 @@
 			document.addEventListener('keydown', shoot)
 			$state.transitionTo('game.start.playing');
 
-			round++;
+			// round++;
 			factory.message = `STARTING`;
 			$rootScope.$broadcast('refresh');
 			factory.team = team;
-			var numZombies = baseNumZombies * round * factory.team.length;
+			var numZombies = baseNumZombies * factory.team.length;
 
 			// clear message
 			setTimeout(function() {
@@ -180,11 +181,11 @@
 				collisionID = setInterval(function() {
 					// console.info('collision');
 					checkCollision();
-					if (noMoreSpawning && factory.zombies.length <= 0) {
-						clearInterval(collisionID);
-						// TODO transition to intermission partial
-						socket.emit('round-end', factory.team, factory.room, 'victory');
-					}
+					// if (noMoreSpawning && factory.zombies.length <= 0) {
+					// 	clearInterval(collisionID);
+					// 	TODO transition to intemission partial
+					// 	socket.emit('round-end', factory.team, factory.room, 'victory');
+					// }
 				},frames);
 				
 				// spawn zombies
@@ -249,7 +250,9 @@
 										if (zombie.x <= 0) {
 											console.warn('zombie has reached the house!');
 											//LOST
-											socket.emit('round-end', factory.team, factory.room, 'failure');
+											if (factory.leader) { // prevent desync loss (remove if desync is extreme)
+												socket.emit('round-end', factory.team, factory.room, 'failure');
+											}
 										}
 									}, frames)
 									one = true;
@@ -275,6 +278,7 @@
 										factory.team.forEach(function(player, pIndex) {
 											if (bullet.owner === player.name) {
 												factory.team[pIndex].score += 5;
+												$rootScope.$broadcast('refresh');
 											}
 										})
 									}

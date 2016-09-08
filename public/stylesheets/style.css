@@ -147,9 +147,10 @@ label {
 }
 .team-display {
 	margin-left: 2vw;
-	display:inline-block;
+	display: flex;
 	position: relative;
 	z-index: 2;
+	margin-top: 10px;
 }
 .player-image {
 	width: 10px;
@@ -160,6 +161,7 @@ label {
 }
 .team-display h6 {
 	display: inline-block;
+	margin: 0 0 0 5px;
 }
 #game-window {
 	position: relative;

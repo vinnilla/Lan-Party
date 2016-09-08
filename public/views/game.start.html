@@ -1,8 +1,9 @@
 <div id="game-start">
 	
-	<div class="team-display" ng-repeat="player in team">
+	<div class="team-display" ng-repeat="player in userData.team">
 		<div class="player-image" id={{player.name}}-image></div>
 		<h6 id={{player.name}}-name>{{player.name}}</h6>
+		<h6 id={{player.name}}-score>{{player.score}}</h6>
 	</div>
 
 	<div id="game-window" ui-view></div>
