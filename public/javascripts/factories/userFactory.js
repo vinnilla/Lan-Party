@@ -53,6 +53,10 @@
 				factory.leader = true;
 			}
 			factory.team = data.room;
+			factory.team.forEach(function(player) {
+				player.ready = false;
+			})
+			console.log(factory.team);
 			$rootScope.$broadcast('newPlayers');
 			$state.transitionTo('game.start.lobby');
 		})
@@ -64,7 +68,7 @@
 				factory.team.forEach(function(player) {
 					// 5 xp/point
 					var exp = player.score * 5;
-					// console.log(exp);
+					console.log(player.name, exp);
 					$http.put('/api/users', {
 						name: player.name,
 						exp: exp
@@ -104,6 +108,7 @@
 				setTimeout(function() {
 					factory.message = '';
 					$state.go('game.start.lobby');
+					// $rootScope.$broadcast('refresh');
 				},3000);
 			}
 		})
@@ -122,6 +127,9 @@
 								// console.info('deleting bullet')
 								clearInterval(bullet.intID);
 							})
+
+							// $rootScope.$broadcast('resetEXP')
+								
 							factory.bullets = [];
 							startOnce = false;
 							scaling = 1;
@@ -160,9 +168,10 @@
 				// ctx.canvas.height = 720;
 				// initialize team
 				factory.team.forEach(function(player) {
+					// console.log(player);
 					player.alive = true;
 					player.score = 0;
-					player.bullets = 12;
+					player.bullets = player.stats['Clip Size'];
 					player.x = 50;
 					player.y = 300;
 					ctx.fillStyle = player.color;
@@ -173,10 +182,10 @@
 
 				// scale the zombie spawns
 				scaleID = setInterval(function() {
-					console.info('scaling increases');
-					scaling += 0.5;
-					console.log(scaling);
-				}, 10000)
+					// console.info('scaling increases');
+					scaling += 0.05;
+					// console.log(scaling);
+				}, 1000)
 
 				// check collision
 				collisionID = setInterval(function() {
@@ -207,6 +216,7 @@
 
 			startOnce = true;
 		})
+
 						function userInput(e) {
 							if (e.keyCode === 87 || e.keyCode === 68 || e.keyCode === 83 || e.keyCode === 65) {
 								factory.sendMovement(e.key);
@@ -340,8 +350,8 @@
 			})
 			factory.team[playerIndex].bullets = "..."
 			setTimeout(function() {
-				factory.team[playerIndex].bullets = 12;
-			}, 1000)
+				factory.team[playerIndex].bullets = factory.team[playerIndex].stats['Clip Size'];
+			}, 2000-(factory.team[playerIndex].stats['Reload Speed']*200))
 		})
 
 		socket.on('player-shoot', function(input) {
@@ -520,7 +530,16 @@
 		}
 
 		factory.startGame = function() {
-			socket.emit('start-game', factory.team, factory.room);
+			var test = true;
+			factory.team.forEach(function(player) {
+				// console.log(player);
+				if (!player.ready) {
+					test = false;
+				}
+			})
+			if (test) {
+				socket.emit('start-game', factory.team, factory.room);
+			}
 		}
 
 		return factory;

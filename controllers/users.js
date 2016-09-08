@@ -49,6 +49,17 @@ function update(req, res) {
 	})
 }
 
+function refresh(req, res) {
+	User.findOne({name: req.body.name}, function(err, user) {
+		if (err) {
+			res.json(err);
+		}
+		else {
+			res.json(user);
+		}
+	})
+}
+
 function remove(req, res) {
 	User.findOneAndRemove({name: req.body.name}, function(err, result) {
 		if(err) {
@@ -180,5 +191,6 @@ module.exports = {
 	update: update,
 	register: register,
 	remove: remove,
-	verifyToken: verify
+	verifyToken: verify,
+	refresh: refresh
 }

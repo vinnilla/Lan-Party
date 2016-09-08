@@ -8,7 +8,7 @@
 
 	mainController.$inject = ['userData']
 	userController.$inject = ['userData']
-	gameController.$inject = ['userData', "$rootScope", "$scope"]
+	gameController.$inject = ['userData', "$rootScope", "$scope", "$http"]
 
 	function mainController(userData) {
 		var self = this;
@@ -48,17 +48,65 @@
 
 	}// end of userController
 
-	function gameController(userData, $rootScope, $scope) {
+	function gameController(userData, $rootScope, $scope, $http) {
+
+		$scope.$on('$viewContentLoaded', function() {
+			$http.post('/api/refresh', {name: $scope.player.name})
+			.then(function(response) {
+				$scope.player = response.data;
+				if ($scope.userData.team) {
+					$scope.userData.team.forEach(function(player) {
+						if ($scope.player.name === player.name) {
+							$scope.player.stats = player.stats;
+						}
+					})
+					console.log($scope.player);
+				}
+			})
+		})
 
 		$scope.userData = userData;
 		$scope.player = userData.user;
 
-		$scope.joinRoom = function() {
-			userData.joinRoom($scope.room);
+		$scope.upgrades = [
+		{name: "Clip Size", value: 12, cost: 1000, base: 12, tick: 1},
+		{name: "Reload Speed", value: 1, cost: 10000, base: 1, tick: 1}
+		];
+		$scope.changeStat = function(stat, type) {
+			$scope.upgrades.forEach(function(upgrade) {
+				if (upgrade.name === stat) {
+					if (type === '+' && $scope.player.experience-upgrade.cost > 0) {
+						upgrade.value += upgrade.tick;
+						changeEXP(-upgrade.cost);
+					}
+					else if (type === '-'){
+						if(upgrade.value-upgrade.tick >= upgrade.base) {
+							upgrade.value -= upgrade.tick;
+							changeEXP(upgrade.cost);
+						}
+					}
+				}
+			})
+		}
+		$scope.updateStats = function() {
+			$scope.userData.team.forEach(function(player) {
+				if (player.name === $scope.player.name) {
+					player.stats = {};
+					$scope.upgrades.forEach(function(stat) {
+						player.stats[stat.name] = stat.value;
+					})
+					player.ready = true;
+					// $scope.$apply();
+				}
+			})
 		}
 
-		$scope.startGame = function() {
-			userData.startGame();
+		function changeEXP(cost) {
+			$scope.player.experience += cost;
+		}
+
+		$scope.joinRoom = function() {
+			userData.joinRoom($scope.room);
 		}
 
 		$rootScope.$on('error', function() {
@@ -78,6 +126,23 @@
 
 		$rootScope.$on('refresh', function() {
 			$scope.$apply();
+		})
+
+		$rootScope.$on('resetEXP', function() {
+			// userData.team.forEach(function(player) {
+			// 	if (player.name === $scope.player.name) {
+			// 		console.log(player);
+			// 		$scope.player = player;
+			// 		$scope.upgrades.forEach(function(stat, index) {
+			// 			$scope.upgrades[index].value = player.stats[stat.name];
+			// 		})
+			// 	}
+			// })
+			$http.post('/api/refresh', {name: $scope.player.name})
+			.then(function(response) {
+				$scope.player = response.data;
+				console.log($scope.player);
+			})
 		})
 
 	}// end of gameController

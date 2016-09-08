@@ -179,7 +179,16 @@ label {
 	text-align: center;
 }
 #start-round {
-	margin-top: 50vh;
+	margin-top: 30vh;
+}
+#game-lobby h3 {
+	margin-bottom: 100px;
+}
+#upgrade-options {
+	margin-bottom: 10px;
+}
+#upgrade-options h5, #upgrade-options h6 {
+	display:inline;
 }
 
 /*GAME.START.PLAYING*/
