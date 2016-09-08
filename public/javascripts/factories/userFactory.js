@@ -353,7 +353,7 @@
 			if (input.key === 'Space') {
 				var ranNum = Math.floor(Math.random()*10000);
 
-				if (factory.team[playerIndex].bullets > 0 || factory.team[playerIndex].bullets != "...") {
+				if (factory.team[playerIndex].bullets > 0 && factory.team[playerIndex].bullets != "...") {
 					// create projectile object
 					var bullet = 
 						{id: ranNum,
@@ -374,12 +374,12 @@
 
 						// check if bullet has reached the edge of the canvas
 						if (bullet.x > canvas.width) {
-							// deduct two points from player if bullet does not hit a zombie
-							factory.team.forEach(function(player, pIndex) {
-								if (bullet.owner === player.name) {
-									factory.team[pIndex].score -= 2;
-								}
-							})
+							// // deduct two points from player if bullet does not hit a zombie
+							// factory.team.forEach(function(player, pIndex) {
+							// 	if (bullet.owner === player.name) {
+							// 		factory.team[pIndex].score -= 2;
+							// 	}
+							// })
 							// remove bullet from array
 							factory.bullets = factory.bullets.filter(function(bullet) {
 								if(bullet.id != ranNum) {
