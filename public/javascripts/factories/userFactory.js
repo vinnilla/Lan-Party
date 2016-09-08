@@ -117,12 +117,12 @@
 								console.info('deleting zombie')
 								clearInterval(zombie.intID);
 							})
+							round = 0;
+							factory.zombies = [];
 							factory.bullets.forEach(function(bullet) {
 								console.info('deleting bullet')
 								clearInterval(bullet.intID);
 							})
-							round = 0;
-							factory.zombies = [];
 							factory.bullets = [];
 							startOnce = false;
 							scaling = 1;
