@@ -59,26 +59,28 @@
 
 		// ---| INTERMISSION LOGIC |--- \\
 		socket.on('round-end', function(team, status) {
-			// convert points to exp and save to backend
-			factory.team.forEach(function(player) {
-				// 5 xp/point
-				var exp = player.score * 5;
-				console.log(exp);
-				$http.put('/api/users', {
-					name: player.name,
-					exp: exp
+			if (factory.leader) {
+				// convert points to exp and save to backend
+				factory.team.forEach(function(player) {
+					// 5 xp/point
+					var exp = player.score * 5;
+					// console.log(exp);
+					$http.put('/api/users', {
+						name: player.name,
+						exp: exp
+					})
+					.then(function(response) {
+						// console.log(response);
+						if (response.data.error) {
+							console.error(response.data.error)
+						}
+						else {
+							// response.data has the updated user information
+							// response.data.experience is how much exp the user has
+						}
+					})
 				})
-				.then(function(response) {
-					// console.log(response);
-					if (response.data.error) {
-						console.log(response.data.error)
-					}
-					else {
-						// response.data has the updated user information
-						// response.data.experience is how much exp the user has
-					}
-				})
-			})
+			}// end of factory.leader if
 
 			if (status === 'victory') {
 				document.removeEventListener('keydown', userInput);
