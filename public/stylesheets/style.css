@@ -54,8 +54,10 @@ label {
 	font-family: 'Press Start 2P', cursive;
 	position: relative;
 	margin: 0 auto;
-	width: 90%;
-	height: 80vh;
+	/*width: 90%;*/
+	/*height: 80vh;*/
+	width: 1080px;
+	height: 720px;
 	background-color: black;
 	border: white solid 1px;
 }
@@ -102,11 +104,13 @@ label {
 }
 #menu {
 	background-color: rgba(0,0,0,0.5);
-	position: absolute;
-	top: 55vh;
-	left: 39vw;
+	/*position: absolute;*/
+	/*top: 55vh;*/
+	/*left: 39vw;*/
 	width: 12vw;
 	height: 12vh;
+	margin: 30vh auto;
+	/*margin-top: 20vh;*/
 	color: white;
 	/*border: rgba(255,255,255,0.5) solid 1px;*/
 	text-align: center;
@@ -183,6 +187,7 @@ label {
 	height: 0px;
 	margin: 0;
 	text-align:center;
+	z-index: 10;
 }
 #playing {
 	/*background-color: rgba(255, 60, 20, 0.5);*/
@@ -218,4 +223,8 @@ label {
 	position: absolute;
 	border-radius: 25px;
 	background-color: green;
+}
+
+canvas {
+	/*border: red solid 1px;*/
 }

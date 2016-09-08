@@ -42,6 +42,11 @@
 			factory.socket = data.socket;
 		})
 
+		factory.joinRoom = function(name) {
+			factory.room = name;
+			socket.emit('join-room', {roomName: name});
+		}
+
 		socket.on('connect-room', function(data) {
 			if (data.room[0].name === factory.name) {
 				console.log('leader');
@@ -50,13 +55,6 @@
 			factory.team = data.room;
 			$rootScope.$broadcast('newPlayers');
 			$state.transitionTo('game.start.lobby');
-			setTimeout(function() {
-			data.room.forEach(function(player) {
-				var name = $(`#${player.name}-name`).css('color', player.color);
-				var image = $(`#${player.name}-image`).css('background-color', player.color);
-				var score = $(`#${player.name}-score`).css('color', player.color);
-			})
-			},500)
 		})
 
 		// ---| INTERMISSION LOGIC |--- \\
@@ -129,10 +127,11 @@
 
 		// ---| GAME LOGIC |--- \\
 		socket.on('start-game', function(team) {
-			console.log(startOnce);
+			// ensure zombies are empty
+			factory.zombies = [];
+			// console.log(startOnce);
 			if (!startOnce) {
 			// movement | shooting | reload
-			document.addEventListener('keydown', userInput)
 			$state.transitionTo('game.start.playing');
 
 			// round++;
@@ -148,12 +147,15 @@
 			}, 2000)
 
 			setTimeout(function() {
+				document.addEventListener('keydown', userInput)
 				// set canvas up
 				canvas = document.getElementById('game_canvas');
 				ctx = canvas.getContext('2d');
 				var border = $('#game');
 				ctx.canvas.width = border.width();
 				ctx.canvas.height = border.height()*0.9;
+				// ctx.canvas.width = 1080;
+				// ctx.canvas.height = 720;
 				// initialize team
 				factory.team.forEach(function(player) {
 					player.alive = true;
@@ -513,11 +515,6 @@
 
 		factory.getTeam = function() {
 			return factory.team;
-		}
-
-		factory.joinRoom = function(name) {
-			factory.room = name;
-			socket.emit('join-room', {roomName: name});
 		}
 
 		factory.startGame = function() {

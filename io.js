@@ -14,7 +14,7 @@ io.on('connection', function(socket) {
 		console.info(players);
 	})// end of on add-player
 
-	socket.on('join-room', function(data) {
+	socket.on('join-room', function(data, fn) {
 
 		function joinRoom() {
 			// console.info(`${player.name} has joined ${data.roomName}`);
@@ -40,7 +40,6 @@ io.on('connection', function(socket) {
 	})// end of on join-room
 
 	socket.on('start-game', function(team, room) {
-		console.log(team);
 		io.to(room).emit('start-game', team);
 	})// end of on start-game
 
