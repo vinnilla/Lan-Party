@@ -360,26 +360,28 @@
 							bulletIndex = index;
 						}
 					})
-					// add intID to bullet object
-					factory.bullets[bulletIndex].intID = intID;
-					// move bullet right
-					factory.bullets[bulletIndex].x += distancePerTick;
-					// check if bullet has reached the edge of the canvas
-					if (factory.bullets[bulletIndex].x > canvas.width) {
-						// deduct 2 points from player for spamming 
-						factory.team.forEach(function(player, pIndex) {
-							if (factory.bullets[bulletIndex].owner === player.name) {
-								factory.team[pIndex].score -= 2;
-							}
-						})
-						// remove bullet from array
-						factory.bullets = factory.bullets.filter(function(bullet) {
-							if (bullet.id != ranNum) {
-								return bullet;
-							}
-						})
-						clearInterval(intID);
-					}
+					if (bulletIndex) {
+						// add intID to bullet object
+						factory.bullets[bulletIndex].intID = intID;
+						// move bullet right
+						factory.bullets[bulletIndex].x += distancePerTick;
+						// check if bullet has reached the edge of the canvas
+						if (factory.bullets[bulletIndex].x > canvas.width) {
+							// deduct 2 points from player for spamming 
+							factory.team.forEach(function(player, pIndex) {
+								if (factory.bullets[bulletIndex].owner === player.name) {
+									factory.team[pIndex].score -= 2;
+								}
+							})
+							// remove bullet from array
+							factory.bullets = factory.bullets.filter(function(bullet) {
+								if (bullet.id != ranNum) {
+									return bullet;
+								}
+							})
+							clearInterval(intID);
+						}// end of edge of canvas check
+					}// end of if bulletIndex
 				}, frames)
 			}
 		})
