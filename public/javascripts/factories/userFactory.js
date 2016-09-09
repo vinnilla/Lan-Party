@@ -134,6 +134,7 @@
 							factory.team.forEach(function(player){
 								player.ready = false;
 							})
+							factory.ready = false;
 							// $rootScope.$broadcast('resetEXP')
 								
 							startOnce = false;
