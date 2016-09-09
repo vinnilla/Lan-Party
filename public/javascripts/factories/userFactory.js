@@ -64,10 +64,12 @@
 
 		// ---| INTERMISSION LOGIC |--- \\
 		socket.on('round-end', function(team, status) {
-			if (factory.leader && saveOnce === false) {
+			if (factory.leader) {
+				// convert points to exp and save to backend
+				if (!saveOnce) {
+				console.log(saveOnce);
 				console.log('uploading');
 				saveOnce = true;
-				// convert points to exp and save to backend
 				factory.team.forEach(function(player) {
 					// 10 xp/point
 					var exp = player.score * 10;
@@ -87,6 +89,7 @@
 						}
 					})
 				})
+				}
 			}// end of factory.leader if
 
 			if (status === 'victory') {
