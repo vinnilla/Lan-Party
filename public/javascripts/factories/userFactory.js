@@ -114,6 +114,7 @@
 		})
 
 						function roundEnd() {
+							// clear intervals
 							clearInterval(collisionID);
 							clearInterval(spawnID);
 							clearInterval(scaleID);
@@ -127,10 +128,14 @@
 								// console.info('deleting bullet')
 								clearInterval(bullet.intID);
 							})
+							factory.bullets = [];
 
+							// reset player ready state
+							factory.team.forEach(function(player){
+								player.ready = false;
+							})
 							// $rootScope.$broadcast('resetEXP')
 								
-							factory.bullets = [];
 							startOnce = false;
 							scaling = 1;
 						}
