@@ -549,6 +549,7 @@
 
 		socket.on('relay-team', function(team) {
 			factory.team = team;
+			$rootScope.$broadcast('refresh');
 			// console.log(factory.team);
 		})
 
