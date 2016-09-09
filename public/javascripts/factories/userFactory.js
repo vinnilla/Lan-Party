@@ -64,7 +64,7 @@
 
 		// ---| INTERMISSION LOGIC |--- \\
 		socket.on('round-end', function(team, status) {
-			if (factory.leader && !saveOnce) {
+			if (factory.leader && saveOnce === false) {
 				console.log('uploading');
 				saveOnce = true;
 				// convert points to exp and save to backend
