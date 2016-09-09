@@ -56,7 +56,7 @@
 			factory.team.forEach(function(player) {
 				player.ready = false;
 			})
-			console.log(factory.team);
+			// console.log(factory.team);
 			$rootScope.$broadcast('newPlayers');
 			$state.transitionTo('game.start.lobby');
 		})
@@ -66,8 +66,8 @@
 			if (factory.leader) {
 				// convert points to exp and save to backend
 				factory.team.forEach(function(player) {
-					// 5 xp/point
-					var exp = player.score * 5;
+					// 10 xp/point
+					var exp = player.score * 10;
 					console.log(player.name, exp);
 					$http.put('/api/users', {
 						name: player.name,
@@ -534,7 +534,7 @@
 			var test = true;
 			factory.team.forEach(function(player) {
 				if (!player.ready) {
-					console.log(player);
+					// console.log(player);
 					test = false;
 				}
 			})
@@ -549,7 +549,7 @@
 
 		socket.on('relay-team', function(team) {
 			factory.team = team;
-			console.log(factory.team);
+			// console.log(factory.team);
 		})
 
 		return factory;

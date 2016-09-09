@@ -53,14 +53,23 @@
 		$scope.$on('$viewContentLoaded', function() {
 			$http.post('/api/refresh', {name: $scope.player.name})
 			.then(function(response) {
+				// update player data with backend
 				$scope.player = response.data;
 				if ($scope.userData.team) {
 					$scope.userData.team.forEach(function(player) {
 						if ($scope.player.name === player.name) {
+							// update player stats
 							$scope.player.stats = player.stats;
 						}
+					})// end of forEach
+					// update $scope.upgrades
+					$scope.upgrades.forEach(function(stat) {
+						stat.value = $scope.player.stats[stat.name];
+						// subtract cost of upgrades from exp
+						$scope.player.experience -= (stat.value-stat.base)*stat.cost;
 					})
-					// console.log($scope.player);
+
+
 				}
 			})
 		})
