@@ -127,6 +127,15 @@ label {
 	margin-bottom: 5vh !important;
 }
 
+/*GAME.SOLO*/
+#solo {
+	text-align: center;
+}
+#solo h1 {
+	margin: 50px auto 100px;
+	position: initial;
+}
+
 /*GAME.GROUP*/
 #game-group {
 	display: block;

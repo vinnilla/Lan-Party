@@ -73,6 +73,7 @@ io.on('connection', function(socket) {
 	socket.on('disconnect', function() {
 		//disconnect player from room
 		if (player) {
+		if (player.room) {
 			//update hash table
 			rooms[player.room] = rooms[player.room].filter(function(player) {
 				if(player.socket != socket.id) {
@@ -89,6 +90,7 @@ io.on('connection', function(socket) {
 		})// end of filter
 		console.info(`After disconnect: `);
 		console.info(players);
+		}
 	})// end of disconnect
 })// end of io connection
 
