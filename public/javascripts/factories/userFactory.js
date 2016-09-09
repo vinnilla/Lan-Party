@@ -69,7 +69,6 @@
 				if (!saveOnce) {
 				console.log(saveOnce);
 				console.log('uploading');
-				saveOnce = true;
 				factory.team.forEach(function(player) {
 					// 10 xp/point
 					var exp = player.score * 10;
@@ -91,6 +90,7 @@
 				})
 				}
 			}// end of factory.leader if
+			saveOnce = true;
 
 			if (status === 'victory') {
 				document.removeEventListener('keydown', userInput);
