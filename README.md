@@ -17,6 +17,23 @@ Once registered/logged in, the users are sent to the main game screen where they
 ##### Game Design:
 The game progresses in waves until the player/team eventually succumbs to the neverending horde of zombies.
 
+###### Controls:
+Input | Action
+--- | ---
+W | Move up
+S | Move down
+A | Move left
+D | Move right
+Space | shoot
+R | Reload
+
+###### Player Stats:
+Upgrade | Base | Increment | EXP Cost | Use
+--- | --- | --- | --- | ---
+Clip Size | 12 | 1 | 1,000 | The amount of bullets you have before you have to reload
+Reload Speed | 1 | 1 | 10,000 | Reduces the base reload time of 2 seconds
+* More stats and weapon options will be added in future versions
+
 ##### Front-End Angular Routes:
 Route | Description
 --- | ---
@@ -50,6 +67,7 @@ password_hash | string | set on registration | authorization
 socket | string | set on login | connecting to socket on backend
 experience | number | default 0, updates with gameplay | track overall level of character
 class | string | default null, updates when class is selected | track character class
+color | string | default white, have yet to implement color selection | keep track of player color (currently randomized)
 room | string | default null, updates when room is joined | track which users are in which rooms
 date | date | set on registration | track date and time account was made
 
