@@ -64,6 +64,7 @@
 
 		// ---| INTERMISSION LOGIC |--- \\
 		socket.on('round-end', function(team, status) {
+			console.log(saveOnce);
 			if (factory.leader && !saveOnce) {
 				// convert points to exp and save to backend
 				factory.team.forEach(function(player) {
