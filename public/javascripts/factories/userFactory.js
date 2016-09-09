@@ -32,6 +32,7 @@
 		var startOnce = false;
 		var scaling = 1;
 		var saveOnce = false;
+		console.log(saveOnce);
 
 		var r = Math.floor(Math.random()*155)+100;
 		var g = Math.floor(Math.random()*155)+100;
