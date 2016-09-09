@@ -1,15 +1,16 @@
 <div id="game-lobby">
 	<h3>WELCOME TO TEAM {{team[0].room.toUpperCase()}}</h3>
+	<h4>PREPARE FOR BATTLE!</h4>
 	<div id="upgrade-menu">
-		<h4>Points to Spend: {{player.experience}}</h5><br/>
+		<h5>Points to Spend: {{player.experience}}</h5><br/>
 		<div id="upgrade-options" ng-repeat="upgrade in upgrades">
-			<h6>{{upgrade.cost}}</h6>
-			<h5>{{upgrade.name}}:</h5> <br/><br/>
+			<h5>{{upgrade.name}}:</h5>
+			<h6>{{upgrade.cost}} pts</h6><br/><br/>
 			<button ng-click="changeStat(upgrade.name, '-')"><</button>
 			<h6>{{upgrade.value}}</h6>
 			<button ng-click="changeStat(upgrade.name, '+')">></button>
 		</div>
 		<button id="ready-button" ng-click="updateStats()">READY</button>
 	</div>
-	<button ng-click="userData.startGame()" id="start-round">Join the Fray</button>
+	<button ng-if="userData.ready" ng-click="userData.startGame()" id="start-round">Join the Fray</button>
 </div>

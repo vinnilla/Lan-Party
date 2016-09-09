@@ -181,8 +181,8 @@ label {
 #start-round {
 	margin-top: 20vh;
 }
-#game-lobby h3 {
-	margin-bottom: 100px;
+#game-lobby h3, #game-lobby h4 {
+	margin-bottom: 50px;
 }
 #upgrade-options {
 	margin-bottom: 10px;

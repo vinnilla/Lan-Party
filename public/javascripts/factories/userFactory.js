@@ -536,16 +536,17 @@
 		}
 
 		factory.startGame = function() {
-			var test = true;
-			factory.team.forEach(function(player) {
-				if (!player.ready) {
-					// console.log(player);
-					test = false;
-				}
-			})
-			if (test) {
+			// var test = true;
+			// factory.team.forEach(function(player) {
+			// 	if (!player.ready) {
+			// 		// console.log(player);
+			// 		test = false;
+			// 	}
+			// })
+			// if (test) {
+
 				socket.emit('start-game', factory.team, factory.room);
-			}
+			// }
 		}
 
 		factory.updatePlayer = function() {
@@ -554,6 +555,12 @@
 
 		socket.on('relay-team', function(team) {
 			factory.team = team;
+			factory.ready = true;
+			factory.team.forEach(function(player) {
+				if (!player.ready) {
+					factory.ready = false;
+				}
+			})
 			$rootScope.$broadcast('refresh');
 			// console.log(factory.team);
 		})
