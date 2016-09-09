@@ -298,6 +298,7 @@
 									if (player.x+25 > zombie.x && player.x+25 < zombie.x+50 &&
 											player.y+25 > zombie.y && player.y+25 < zombie.y+50) {
 										factory.team[pIndex].alive = false;
+										document.removeEventListener('keydown', userInput)
 									}
 								})
 							})
