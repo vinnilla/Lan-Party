@@ -31,6 +31,7 @@
 		var spawnID;
 		var startOnce = false;
 		var scaling = 1;
+		var saveOnce = false;
 
 		var r = Math.floor(Math.random()*155)+100;
 		var g = Math.floor(Math.random()*155)+100;
@@ -63,7 +64,7 @@
 
 		// ---| INTERMISSION LOGIC |--- \\
 		socket.on('round-end', function(team, status) {
-			if (factory.leader) {
+			if (factory.leader && !saveOnce) {
 				// convert points to exp and save to backend
 				factory.team.forEach(function(player) {
 					// 10 xp/point
@@ -84,6 +85,7 @@
 						}
 					})
 				})
+				saveOnce = true;
 			}// end of factory.leader if
 
 			if (status === 'victory') {
@@ -138,6 +140,7 @@
 							// $rootScope.$broadcast('resetEXP')
 								
 							startOnce = false;
+							saveOnce = false;
 							scaling = 1;
 						}
 
