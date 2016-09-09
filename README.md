@@ -82,3 +82,4 @@ room | string | default null, updates when room is joined | track which users ar
 date | date | set on registration | track date and time account was made
 
 ##### Known Bugs:
+Currently all squashed! :)
