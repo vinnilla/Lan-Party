@@ -63,14 +63,14 @@
 						}
 					})// end of forEach
 					// update $scope.upgrades
-					$scope.upgrades.forEach(function(stat) {
-						stat.value = $scope.player.stats[stat.name];
-						// subtract cost of upgrades from exp
-						$scope.player.experience -= (stat.value-stat.base)*stat.cost;
-					})
-
-
-				}
+					if ($scope.player.stats) {
+						$scope.upgrades.forEach(function(stat) {
+							stat.value = $scope.player.stats[stat.name];
+							// subtract cost of upgrades from exp
+							$scope.player.experience -= (stat.value-stat.base)*stat.cost;
+						})
+					}
+				}// end of if team exists
 			})
 		})
 
