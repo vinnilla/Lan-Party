@@ -66,6 +66,7 @@
 		socket.on('round-end', function(team, status) {
 			console.log(saveOnce);
 			if (factory.leader && !saveOnce) {
+				saveOnce = true;
 				// convert points to exp and save to backend
 				factory.team.forEach(function(player) {
 					// 10 xp/point
@@ -86,7 +87,6 @@
 						}
 					})
 				})
-				saveOnce = true;
 			}// end of factory.leader if
 
 			if (status === 'victory') {
