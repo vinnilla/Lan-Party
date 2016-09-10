@@ -30,10 +30,10 @@ The game progresses in waves until the player/team eventually succumbs to the ne
 ###### Controls:
 Input | Action
 --- | ---
-W | Move up
-S | Move down
-A | Move left
-D | Move right
+W or Arrow Up | Move up
+S or Arrow Down | Move down
+A or Arrow Left | Move left
+D or Arrow Right | Move right
 Space | Shoot
 R | Reload
 
