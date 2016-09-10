@@ -2,7 +2,7 @@
 	
 	<div class="team-display" ng-repeat="player in userData.team">
 		<div ng-if="player.ready" class="player-image" id={{player.name}}-image style="background-color: {{player.color}};"></div>
-		<div ng-if="!player.ready" class="player-image" id={{player.name}}-image></div>
+		<div ng-if="!player.ready" class="player-image" id={{player.name}}-image style="background-color: 'black';"></div>
 		<h6 id={{player.name}}-name style="color: {{player.color}}">{{player.name}}</h6>
 		<h6 id={{player.name}}-score style="color: {{player.color}}">{{player.score}}</h6>
 	</div>

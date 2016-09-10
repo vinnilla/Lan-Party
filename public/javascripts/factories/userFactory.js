@@ -54,10 +54,11 @@
 				factory.leader = true;
 			}
 			factory.team = data.room;
-			factory.team.forEach(function(player) {
-				player.ready = false;
-			})
-			// console.log(factory.team);
+			factory.ready = false;
+			// factory.team.forEach(function(player) {
+			// 	player.ready = false;
+			// })
+			console.log(factory.team);
 			$rootScope.$broadcast('newPlayers');
 			$state.transitionTo('game.start.lobby');
 		})
