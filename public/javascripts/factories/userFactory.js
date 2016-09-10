@@ -229,7 +229,8 @@
 		})
 
 						function userInput(e) {
-							if (e.keyCode === 87 || e.keyCode === 68 || e.keyCode === 83 || e.keyCode === 65) {
+							if (e.keyCode === 87 || e.keyCode === 68 || e.keyCode === 83 || e.keyCode === 65 ||
+									e.keyCode === 38 || e.keyCode === 40 || e.keyCode === 37 || e.keyCode === 39) {
 								factory.sendMovement(e.key);
 							}
 							else if (e.keyCode === 32) {
@@ -338,16 +339,16 @@
 			})
 			var distancePerMove = 50;
 			// check movement keys
-			if (move.key === 'w' && (factory.team[playerIndex].y-distancePerMove) >= 0) {
+			if ((move.key === 'w' || move.key === 'ArrowUp') && (factory.team[playerIndex].y-distancePerMove) >= 0) {
 				factory.team[playerIndex].y -= distancePerMove;
 			}
-			if (move.key === 's' && (factory.team[playerIndex].y+distancePerMove) <= canvas.height) {				
+			if ((move.key === 's' || move.key === 'ArrowDown') && (factory.team[playerIndex].y+distancePerMove) <= canvas.height) {				
 				factory.team[playerIndex].y += distancePerMove;
 			}
-			if (move.key === 'a' && (factory.team[playerIndex].x-distancePerMove) >= 0) {
+			if ((move.key === 'a' || move.key === 'ArrowLeft') && (factory.team[playerIndex].x-distancePerMove) >= 0) {
 				factory.team[playerIndex].x -= distancePerMove;
 			}
-			if (move.key === 'd' && (factory.team[playerIndex].x+distancePerMove) <= canvas.width) {
+			if ((move.key === 'd' || move.key === 'ArrowRight') && (factory.team[playerIndex].x+distancePerMove) <= canvas.width) {
 				factory.team[playerIndex].x += distancePerMove;
 			}
 			drawAll();
