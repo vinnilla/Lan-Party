@@ -6,18 +6,20 @@
 		.controller('userController', userController)
 		.controller('gameController', gameController);
 
-	mainController.$inject = ['userData']
-	userController.$inject = ['userData']
-	gameController.$inject = ['userData', "$rootScope", "$scope", "$http"]
+	mainController.$inject = ['userData', 'authData']
+	userController.$inject = ['userData', 'authData']
+	gameController.$inject = ['userData', 'authData', "$rootScope", "$scope", "$http"]
 
-	function mainController(userData) {
+	function mainController(userData, authData) {
 		var self = this;
 		this.userData = userData; // pointer to factory
+		this.authData = authData;
 	}// end of mainController
 
-	function userController(userData) {
+	function userController(userData, authData) {
 		var self = this;
 		this.userData = userData; // pointer to factory
+		this.authData = authData;
 
 		this.name; // updated dynamically with name input field
 		this.password;
@@ -28,9 +30,10 @@
 			if(self.password === self.conpassword) {
 				// send data to factory
 				userData.name = self.name;
-				userData.password = self.password;
+				authData.name = self.name;
+				authData.password = self.password;
 				// factory function that talks to backend
-				userData.register();
+				authData.register();
 			}
 			else {
 				self.error = "Passwords do not match";
@@ -40,15 +43,16 @@
 		this.login = function () {
 			// send data to factory
 			userData.name = self.name;
-			userData.password = self.password;
+			authData.name = self.name;
+			authData.password = self.password;
 			// factory function that talks to backend
-			self.error = userData.login();
+			self.error = authData.login();
 
 		}// end of join function
 
 	}// end of userController
 
-	function gameController(userData, $rootScope, $scope, $http) {
+	function gameController(userData, authData, $rootScope, $scope, $http) {
 
 		$scope.$on('$viewContentLoaded', function() {
 			$http.post('/api/refresh', {name: $scope.player.name})
@@ -75,7 +79,8 @@
 		})
 
 		$scope.userData = userData;
-		$scope.player = userData.user;
+		$scope.authData = authData;
+		$scope.player = authData.user;
 
 		$scope.upgrades = [
 		{name: "Clip Size", value: 12, cost: 1000, base: 12, tick: 1},

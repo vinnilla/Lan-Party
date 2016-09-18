@@ -9,13 +9,6 @@
 	function main($http, $state, $rootScope, socket) {
 		var factory = {};
 
-		// check server for all logged in users
-		socket.emit('check-players');
-
-		socket.on('check-players', function(data) {
-			factory.allPlayers = data;
-		})
-
 		// variables updated with controllers
 		factory.login;
 		factory.name;
@@ -37,12 +30,6 @@
 		var startOnce = false;
 		var scaling = 1;
 		var saveOnce = false;
-
-		var r = Math.floor(Math.random()*155)+100;
-		var g = Math.floor(Math.random()*155)+100;
-		var b = Math.floor(Math.random()*155)+100;
-		var randomColor = `rgb(${r},${g},${b})`;
-		// var randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
 
 		socket.on('get-socket', function(data) {
 			factory.socket = data.socket;
@@ -185,6 +172,7 @@
 				// initialize team
 				factory.team.forEach(function(player) {
 					// console.log(player);
+					factory.color = player.color;
 					player.alive = true;
 					player.score = 0;
 					player.bullets = player.stats['Clip Size'];
@@ -251,7 +239,7 @@
 						}
 
 						factory.sendShot = function(key) {
-							socket.emit('player-shoot', {player:factory.name, key: key, color: randomColor}, factory.room);
+							socket.emit('player-shoot', {player:factory.name, key: key, color: factory.color}, factory.room);
 						}
 
 						factory.sendReload = function(key) {
@@ -482,60 +470,6 @@
 					console.error(err);
 				})
 		}
-
-		factory.login = function() {
-			// check if account is already logged in
-			var unique = true;
-			factory.allPlayers.forEach(function(player) {
-				if (player.name === factory.name) {
-					unique = false;
-					console.log('not unique');
-					factory.error = "Account is already logged in."
-				}
-			})
-
-			if (unique) {
-			$http.post('/api/login', 
-				{name:factory.name, 
-				password: factory.password,
-				socket: factory.socket})
-			.then(function(response) {
-				if(response.data.error) {
-					factory.error = response.data.error;
-				}
-				else {
-					factory.error = undefined;
-					localStorage.token = response.data.token;
-					addPlayer(response.data.user, response.data.token);
-				}
-			})
-			}
-		}
-
-		factory.register = function() {
-			$http.post('/api/register',
-				{name: factory.name,
-				password: factory.password,
-				socket: factory.socket})
-			.then(function(response) {
-				if(response.data.error) {
-					factory.error = response.data.error;
-				}
-				else {
-					factory.error = undefined;
-					localStorage.token = response.data.token;
-					addPlayer(response.data.user, response.data.token);
-				}
-			})
-		}
-
-						function addPlayer(player,token) {
-							// keep user data in factory
-							factory.user = player;
-							socket.emit('add-player', {name:player.name, socket: player.socket, class: player.class, exp: player.experience, color: randomColor, token: token})
-							// switch to game state
-							$state.transitionTo('game.home')
-						}
 
 		factory.isLoggedIn = function() {
 			if (factory.name) {
