@@ -7,6 +7,10 @@ io.on('connection', function(socket) {
 	socket.emit('get-socket', {socket: socket.id})
 	var player;
 
+	socket.on('check-players', function() {
+		io.emit('check-players', players);
+	})
+
 	socket.on('add-player', function(data) {
 		players.push(data);
 		player = data;

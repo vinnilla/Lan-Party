@@ -11,6 +11,13 @@
 		// connect to socket
 		var socket = io();
 
+		// check server for all logged in users
+		socket.emit('check-players');
+
+		socket.on('check-players', function(data) {
+			factory.allPlayers = data;
+		})
+
 		// variables updated with controllers
 		factory.login;
 		factory.name;
@@ -479,6 +486,17 @@
 		}
 
 		factory.login = function() {
+			// check if account is already logged in
+			var unique = true;
+			factory.allPlayers.forEach(function(player) {
+				if (player.name === factory.name) {
+					unique = false;
+					console.log('not unique');
+					factory.error = "Account is already logged in."
+				}
+			})
+
+			if (unique) {
 			$http.post('/api/login', 
 				{name:factory.name, 
 				password: factory.password,
@@ -493,6 +511,7 @@
 					addPlayer(response.data.user, response.data.token);
 				}
 			})
+			}
 		}
 
 		factory.register = function() {
@@ -511,6 +530,7 @@
 				}
 			})
 		}
+
 						function addPlayer(player,token) {
 							// keep user data in factory
 							factory.user = player;
