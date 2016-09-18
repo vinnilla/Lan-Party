@@ -88,7 +88,7 @@ io.on('connection', function(socket) {
 		}
 		players = players.filter(function(player) {
 			// remove disconnected player from array
-			if(player.socket != socket.id) {
+			if(player.socket != socket.id.substring(2)) {
 				return player;
 			}
 		})// end of filter

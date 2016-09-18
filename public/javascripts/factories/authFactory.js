@@ -72,7 +72,7 @@
 						function addPlayer(player,token) {
 							// keep user data in factory
 							factory.user = player;
-							socket.emit('add-player', {name:player.name, socket: player.socket, class: player.class, exp: player.experience, color: randomColor, token: token})
+							socket.emit('add-player', {name:player.name, socket: socket.id, class: player.class, exp: player.experience, color: randomColor, token: token})
 							// switch to game state
 							$state.transitionTo('game.home')
 						}
