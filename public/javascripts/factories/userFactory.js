@@ -4,12 +4,10 @@
 	angular.module('lanParty')
 		.factory('userData', main);
 
-	main.$inject = ['$http', '$state', "$rootScope"];
+	main.$inject = ['$http', '$state', "$rootScope", 'socketData'];
 
-	function main($http, $state, $rootScope) {
+	function main($http, $state, $rootScope, socket) {
 		var factory = {};
-		// connect to socket
-		var socket = io();
 
 		// check server for all logged in users
 		socket.emit('check-players');
