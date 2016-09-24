@@ -37,9 +37,6 @@
 		image = new Image();
 		image.src = "http://i.imgur.com/6JNfe2p.png";
 		factory.zombieWalk.push(image);
-		image.addEventListener('load', function() {
-			console.log('zombie images loaded');
-		})
 		
 		return factory;
 	}// end of main

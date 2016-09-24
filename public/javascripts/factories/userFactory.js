@@ -452,8 +452,8 @@
 		function drawZombies() {
 			factory.zombies.forEach(function(zombie) {
 				var iteration = zombie.iteration%8;
-				ctx.fillStyle = 'green';
-				ctx.fillRect(zombie.x, zombie.y, 50, 50);
+				// ctx.fillStyle = 'green';
+				// ctx.fillRect(zombie.x, zombie.y, 50, 50);
 				ctx.drawImage(images.zombieWalk[iteration], zombie.x, zombie.y)
 			})
 		}
