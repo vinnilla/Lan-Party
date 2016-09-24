@@ -281,7 +281,7 @@
 							factory.bullets.forEach(function(bullet, bIndex) {
 								factory.zombies.forEach(function(zombie, zIndex) {
 									if (bullet.y > zombie.y && bullet.y < zombie.y+50 &&
-											bullet.x+5 > zombie.x+10 && bullet.x+5 < zombie.x+40) {
+											bullet.x+5 > zombie.x+15 && bullet.x+5 < zombie.x+50) {
 										// remove from arrays
 										factory.bullets.splice(bIndex, 1);
 										factory.zombies.splice(zIndex, 1);
