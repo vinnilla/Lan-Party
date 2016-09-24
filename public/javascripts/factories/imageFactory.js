@@ -11,6 +11,8 @@
 		// get images from imgur
 		factory.zombieNeutral = new Image();
 		factory.zombieNeutral.src = "https://i.imgur.com/rni6597.png";
+		factory.playerNeutral = new Image();
+		factory.playerNeutral.src = "https://i.imgur.com/nmCOktm.png";
 		// create zombieWalk array of images
 		factory.zombieWalk = [];
 		var image = new Image();

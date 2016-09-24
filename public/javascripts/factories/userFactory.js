@@ -435,9 +435,10 @@
 			factory.team.forEach(function(player) {
 				if (player.alive) {
 					ctx.fillStyle = player.color;
-					ctx.fillRect(player.x, player.y, 50, 50);
+					ctx.fillRect(player.x+12, player.y+2, 25, 40);
+					ctx.drawImage(images.playerNeutral, player.x, player.y);
 					ctx.font = '24px serif';
-					ctx.strokeText(player.bullets, player.x+5, player.y+30)
+					ctx.fillText(player.bullets, player.x+10, player.y-8);
 				}
 			})
 		}
@@ -454,7 +455,7 @@
 				var iteration = zombie.iteration%8;
 				// ctx.fillStyle = 'green';
 				// ctx.fillRect(zombie.x, zombie.y, 50, 50);
-				ctx.drawImage(images.zombieWalk[iteration], zombie.x, zombie.y)
+				ctx.drawImage(images.zombieWalk[iteration], zombie.x, zombie.y);
 			})
 		}
 
