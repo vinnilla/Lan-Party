@@ -80,7 +80,7 @@ io.on('connection', function(socket) {
 		if (player.room) {
 			//update hash table
 			rooms[player.room] = rooms[player.room].filter(function(player) {
-				if(player.socket != socket.id) {
+				if(player.socket != socket.id.substring(2)) {
 					return player;
 				}
 			});
