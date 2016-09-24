@@ -14,28 +14,28 @@
 		// create zombieWalk array of images
 		factory.zombieWalk = [];
 		var image = new Image();
-		image.src = "http://i.imgur.com/7xnkd1x.png";
+		image.src = "https://i.imgur.com/7xnkd1x.png";
 		factory.zombieWalk.push(image);
 		image = new Image();
-		image.src = "http://i.imgur.com/W8YivT4.png";
+		image.src = "https://i.imgur.com/W8YivT4.png";
 		factory.zombieWalk.push(image);
 		image = new Image();
-		image.src = "http://i.imgur.com/3lQndJR.png";
+		image.src = "https://i.imgur.com/3lQndJR.png";
 		factory.zombieWalk.push(image);
 		image = new Image();
-		image.src = "http://i.imgur.com/ohyTwbe.png";
+		image.src = "https://i.imgur.com/ohyTwbe.png";
 		factory.zombieWalk.push(image);
 		image = new Image();
-		image.src = "http://i.imgur.com/u7uax8S.png";
+		image.src = "https://i.imgur.com/u7uax8S.png";
 		factory.zombieWalk.push(image);
 		image = new Image();
-		image.src = "http://i.imgur.com/FAlCVro.png";
+		image.src = "https://i.imgur.com/FAlCVro.png";
 		factory.zombieWalk.push(image);
 		image = new Image();
-		image.src = "http://i.imgur.com/g6zvOVC.png";
+		image.src = "https://i.imgur.com/g6zvOVC.png";
 		factory.zombieWalk.push(image);
 		image = new Image();
-		image.src = "http://i.imgur.com/6JNfe2p.png";
+		image.src = "https://i.imgur.com/6JNfe2p.png";
 		factory.zombieWalk.push(image);
 		
 		return factory;
