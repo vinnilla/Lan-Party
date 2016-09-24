@@ -285,6 +285,7 @@
 										// remove from arrays
 										factory.bullets.splice(bIndex, 1);
 										factory.zombies.splice(zIndex, 1);
+										console.log(factory.zombies.length);
 										// clear intervals
 										clearInterval(bullet.intID);
 										clearInterval(zombie.intID);
