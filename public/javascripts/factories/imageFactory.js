@@ -10,7 +10,7 @@
 		var factory = {};
 		// get images from imgur
 		factory.zombieNeutral = new Image();
-		factory.zombieNeutral.src = "http://i.imgur.com/rni6597.png";
+		factory.zombieNeutral.src = "https://i.imgur.com/rni6597.png";
 		// create zombieWalk array of images
 		factory.zombieWalk = [];
 		var image = new Image();
