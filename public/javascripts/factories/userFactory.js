@@ -4,9 +4,9 @@
 	angular.module('lanParty')
 		.factory('userData', main);
 
-	main.$inject = ['$http', '$state', "$rootScope", 'socketData'];
+	main.$inject = ['$http', '$state', "$rootScope", 'socketData', 'imageData'];
 
-	function main($http, $state, $rootScope, socket) {
+	function main($http, $state, $rootScope, socket, images) {
 		var factory = {};
 
 		// variables updated with controllers
@@ -449,8 +449,9 @@
 
 		function drawZombies() {
 			factory.zombies.forEach(function(zombie) {
-				ctx.fillStyle = 'green';
-				ctx.fillRect(zombie.x, zombie.y, 50, 50);
+				// ctx.fillStyle = 'green';
+				// ctx.fillRect(zombie.x, zombie.y, 50, 50);
+				ctx.drawImage(images.zombieNeutral, zombie.x, zombie.y)
 			})
 		}
 

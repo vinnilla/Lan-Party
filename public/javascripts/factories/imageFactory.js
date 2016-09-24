@@ -9,7 +9,8 @@
 	function main($http) {
 		var factory = {};
 		// get images from imgur
-		factory.zn = "http://imgur.com/rni6597";
+		factory.zombieNeutral = new Image();
+		factory.zombieNeutral.src = "http://i.imgur.com/rni6597.png";
 		return factory;
 	}// end of main
 

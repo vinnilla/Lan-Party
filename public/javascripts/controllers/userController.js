@@ -8,7 +8,7 @@
 
 	mainController.$inject = ['userData', 'authData']
 	userController.$inject = ['userData', 'authData']
-	gameController.$inject = ['userData', 'authData', 'imageData', "$rootScope", "$scope", "$http"]
+	gameController.$inject = ['userData', 'authData', "$rootScope", "$scope", "$http"]
 
 	function mainController(userData, authData) {
 		var self = this;
@@ -52,7 +52,7 @@
 
 	}// end of userController
 
-	function gameController(userData, authData, imageData, $rootScope, $scope, $http) {
+	function gameController(userData, authData, $rootScope, $scope, $http) {
 
 		$scope.$on('$viewContentLoaded', function() {
 			$http.post('/api/refresh', {name: $scope.player.name})
