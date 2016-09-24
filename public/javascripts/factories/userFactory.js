@@ -261,12 +261,14 @@
 									// create new zombie
 									var zombie = {id: ranNum, y: randomHeight, x:canvas.width};
 									// zombie movement
+									zombie.iteration = 0;
 									var intID = setInterval(function(){
 										// save intID into zombie object
 										zombie.intID = intID;
 										// move zombie left
-										zombie.x -= 2*scaling;
-									}, frames)
+										zombie.x -= 4*scaling;
+										zombie.iteration++;
+									}, frames*10)
 									one = true;
 									factory.zombies.push(zombie);
 								}
@@ -279,7 +281,7 @@
 							factory.bullets.forEach(function(bullet, bIndex) {
 								factory.zombies.forEach(function(zombie, zIndex) {
 									if (bullet.y > zombie.y && bullet.y < zombie.y+50 &&
-											bullet.x+5 > zombie.x && bullet.x+5 < zombie.x+50) {
+											bullet.x+5 > zombie.x+10 && bullet.x+5 < zombie.x+40) {
 										// remove from arrays
 										factory.bullets.splice(bIndex, 1);
 										factory.zombies.splice(zIndex, 1);
@@ -449,9 +451,10 @@
 
 		function drawZombies() {
 			factory.zombies.forEach(function(zombie) {
+				var iteration = zombie.iteration%8;
 				// ctx.fillStyle = 'green';
 				// ctx.fillRect(zombie.x, zombie.y, 50, 50);
-				ctx.drawImage(images.zombieNeutral, zombie.x, zombie.y)
+				ctx.drawImage(images.zombieWalk[iteration], zombie.x, zombie.y)
 			})
 		}
 
