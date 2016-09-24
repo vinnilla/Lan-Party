@@ -13,6 +13,7 @@
 		factory.zombieNeutral.src = "https://i.imgur.com/rni6597.png";
 		factory.playerNeutral = new Image();
 		factory.playerNeutral.src = "https://i.imgur.com/nmCOktm.png";
+
 		// create zombieWalk array of images
 		factory.zombieWalk = [];
 		var image = new Image();
@@ -39,6 +40,27 @@
 		image = new Image();
 		image.src = "https://i.imgur.com/6JNfe2p.png";
 		factory.zombieWalk.push(image);
+
+		// create zombieDeath array of images
+		factory.zombieDeath = [];
+		image = new Image();
+		image.src = "https://i.imgur.com/3t3trGk.png";
+		factory.zombieDeath.push(image);
+		image = new Image();
+		image.src = "https://i.imgur.com/h4wq1tJ.png";
+		factory.zombieDeath.push(image);
+		image = new Image();
+		image.src = "https://i.imgur.com/vtfVUZM.png";
+		factory.zombieDeath.push(image);
+		image = new Image();
+		image.src = "https://i.imgur.com/gZA6Gom.png";
+		factory.zombieDeath.push(image);
+		image = new Image();
+		image.src = "https://i.imgur.com/6zZeddC.png";
+		factory.zombieDeath.push(image);
+		image = new Image();
+		image.src = "https://i.imgur.com/yP2918K.png";
+		factory.zombieDeath.push(image);
 		
 		return factory;
 	}// end of main

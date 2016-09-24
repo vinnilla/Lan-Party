@@ -259,7 +259,7 @@
 
 								if (!one) {
 									// create new zombie
-									var zombie = {id: ranNum, y: randomHeight, x:canvas.width};
+									var zombie = {id: ranNum, y: randomHeight, x:canvas.width, alive:true};
 									// zombie movement
 									zombie.iteration = 0;
 									var intID = setInterval(function(){
@@ -274,6 +274,30 @@
 								}
 							})
 							
+						}// end of spawnZombie function
+
+						function ZombieDeath(id) {
+							// must use unique id instead of array index because multiple deaths can occur
+							var int;
+							factory.zombies.forEach(function(zombie) {
+								if (zombie.id == id) {
+									int = setInterval(function() {
+										if (zombie.death+1 < images.zombieDeath.length) {
+											zombie.death++;
+										}
+									}, frames*10);								
+								}
+							})// end of forEach
+							// delete zombie from array
+							setTimeout(function() {
+								clearInterval(int);
+								// filter to ensure correct zombie is removed
+								factory.zombies = factory.zombies.filter(function(zombie) {
+									if (zombie.id != id) {
+										return zombie;
+									}
+								});
+							}, frames*(10+10*images.zombieDeath.length+1));
 						}
 
 						function checkCollision() {
@@ -281,10 +305,14 @@
 							factory.bullets.forEach(function(bullet, bIndex) {
 								factory.zombies.forEach(function(zombie, zIndex) {
 									if (bullet.y > zombie.y && bullet.y < zombie.y+50 &&
-											bullet.x+5 > zombie.x+15 && bullet.x+5 < zombie.x+50) {
+											bullet.x+5 > zombie.x+15 && bullet.x+5 < zombie.x+50 && 
+											zombie.alive) {
 										// remove from arrays
 										factory.bullets.splice(bIndex, 1);
-										factory.zombies.splice(zIndex, 1);
+										// initiate zombie death animation
+										ZombieDeath(zombie.id);
+										factory.zombies[zIndex].death = 0;
+										factory.zombies[zIndex].alive = false;
 										// clear intervals
 										clearInterval(bullet.intID);
 										clearInterval(zombie.intID);
@@ -452,10 +480,16 @@
 
 		function drawZombies() {
 			factory.zombies.forEach(function(zombie) {
-				var iteration = zombie.iteration%8;
-				// ctx.fillStyle = 'green';
-				// ctx.fillRect(zombie.x, zombie.y, 50, 50);
-				ctx.drawImage(images.zombieWalk[iteration], zombie.x, zombie.y);
+				if(zombie.alive) {
+					var iteration = zombie.iteration%8;
+					// ctx.fillStyle = 'green';
+					// ctx.fillRect(zombie.x, zombie.y, 50, 50);
+					ctx.drawImage(images.zombieWalk[iteration], zombie.x, zombie.y);
+				}
+				else {
+					// console.log(zombie.death)
+					ctx.drawImage(images.zombieDeath[zombie.death], zombie.x, zombie.y);
+				}
 			})
 		}
 
