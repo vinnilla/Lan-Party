@@ -454,6 +454,7 @@
 		function drawAll() {
 			// clear canvas
 			ctx.clearRect(0,0,canvas.width, canvas.height);
+			ctx.drawImage(images.background, 0, 0);
 			drawPlayers();
 			drawBullets();
 			drawZombies();
