@@ -187,8 +187,13 @@
 				// scale the zombie spawns
 				scaleID = setInterval(function() {
 					// console.info('scaling increases');
-					scaling += 0.05;
-					// console.log(scaling);
+					if (scaling < 5) {
+						scaling += 0.1;
+						// console.log(scaling);
+					}
+					else {
+						console.log('no more scaling');
+					}
 				}, 1000)
 
 				// check collision
@@ -266,9 +271,9 @@
 										// save intID into zombie object
 										zombie.intID = intID;
 										// move zombie left
-										zombie.x -= 4*scaling;
+										zombie.x -= 4;
 										zombie.iteration++;
-									}, frames*10)
+									}, frames*10/scaling)
 									one = true;
 									factory.zombies.push(zombie);
 								}
