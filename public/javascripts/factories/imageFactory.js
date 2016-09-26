@@ -10,7 +10,7 @@
 		var factory = {};
 		// get images from imgur
 		factory.background = new Image();
-		factory.background.src = "https://i.imgur.com/xGkCmzi.png";
+		factory.background.src = "https://i.imgur.com/QssdgKe.png";
 		factory.zombieNeutral = new Image();
 		factory.zombieNeutral.src = "https://i.imgur.com/rni6597.png";
 		factory.playerNeutral = new Image();
