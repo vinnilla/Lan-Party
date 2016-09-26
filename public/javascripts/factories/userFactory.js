@@ -52,6 +52,7 @@
 			// })
 			console.log(factory.team);
 			$rootScope.$broadcast('newPlayers');
+			console.log(factory.group);
 			$state.transitionTo('game.start.lobby');
 		})
 
@@ -480,7 +481,7 @@
 		function drawBullets() {
 			factory.bullets.forEach(function(bullet) {
 				ctx.fillStyle = bullet.color;
-				ctx.fillRect(bullet.x, bullet.y, 10, 3);
+				ctx.fillRect(bullet.x, bullet.y, 5, 3);
 			})
 		}
 

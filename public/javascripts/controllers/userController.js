@@ -121,7 +121,13 @@
 		}
 
 		$scope.joinRoom = function() {
+			$scope.userData.group = true;
 			userData.joinRoom($scope.room);
+		}
+
+		$scope.soloRoom = function() {
+			$scope.userData.group = false;
+			userData.joinRoom(Math.floor(Math.random()*10000+1000).toString());
 		}
 
 		$rootScope.$on('error', function() {
