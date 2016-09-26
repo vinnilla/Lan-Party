@@ -177,7 +177,7 @@
 					player.score = 0;
 					player.bullets = player.stats['Clip Size'];
 					player.x = 50;
-					player.y = 300;
+					player.y = 500;
 					ctx.fillStyle = player.color;
 					ctx.fillRect(player.x, player.y, 50, 50);
 				})
@@ -360,12 +360,12 @@
 					playerIndex = index;
 				}
 			})
-			var distancePerMove = 50;
+			var distancePerMove = 25;
 			// check movement keys
-			if ((move.key === 'w' || move.key === 'ArrowUp') && (factory.team[playerIndex].y-distancePerMove) >= 0) {
+			if ((move.key === 'w' || move.key === 'ArrowUp') && (factory.team[playerIndex].y-distancePerMove) >= 380) {
 				factory.team[playerIndex].y -= distancePerMove;
 			}
-			if ((move.key === 's' || move.key === 'ArrowDown') && (factory.team[playerIndex].y+distancePerMove) <= canvas.height) {				
+			if ((move.key === 's' || move.key === 'ArrowDown') && (factory.team[playerIndex].y+distancePerMove) <= canvas.height-50) {				
 				factory.team[playerIndex].y += distancePerMove;
 			}
 			if ((move.key === 'a' || move.key === 'ArrowLeft') && (factory.team[playerIndex].x-distancePerMove) >= 0) {

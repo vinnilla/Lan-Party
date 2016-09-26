@@ -64,9 +64,11 @@ io.on('connection', function(socket) {
 	})
 
 	socket.on('get-random', function(height, room) {
-		var y = Math.floor(Math.random() * height-100);
-		var remainder = y%50;
-		y = 50+y-remainder;
+		// var y = Math.floor(Math.random() * height-100);
+		var variation = 25;// smaller the number means more possible spawn points
+		var y = Math.floor(Math.random()*(height-50-variation)/3)+380+variation;
+		var remainder = y%variation; 
+		y = y-remainder;
 		io.to(room).emit('get-random', y);
 	})
 
