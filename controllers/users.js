@@ -36,7 +36,12 @@ function update(req, res) {
 			res.json(err);
 		}
 		else {
-			user.experience += req.body.exp;
+			if (req.body.exp) {
+				user.experience += req.body.exp;
+			}
+			if (req.body.color) {
+				user.color = req.body.color;
+			}
 			user.save(function(err, update) {
 				if (err) {
 					res.json({error: err});

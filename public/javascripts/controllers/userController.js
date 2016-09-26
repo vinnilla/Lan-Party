@@ -4,10 +4,12 @@
 	angular.module('lanParty')
 		.controller('mainController', mainController)
 		.controller('userController', userController)
+		.controller('profileController', profileController)
 		.controller('gameController', gameController);
 
 	mainController.$inject = ['userData', 'authData']
 	userController.$inject = ['userData', 'authData']
+	profileController.$inject = ['userData', 'imageData', '$scope', '$http', '$state']
 	gameController.$inject = ['userData', 'authData', 'imageData', "$rootScope", "$scope", "$http"]
 
 	function mainController(userData, authData) {
@@ -51,6 +53,37 @@
 		}// end of join function
 
 	}// end of userController
+
+	function profileController(userData, images, $scope, $http, $state) {
+		$scope.userData = userData;
+		var canvas = document.getElementById('playerPreview');
+		var ctx = canvas.getContext('2d');
+		ctx.canvas.width = 50;
+		ctx.canvas.height = 50;
+		ctx.fillStyle = 'white';
+		ctx.fillRect(12, 2, 25, 40);
+		ctx.drawImage(images.playerNeutral, 0, 0);
+
+		$("#picker").on('dragstop.spectrum', function(e, color) {
+			console.log(color);
+			ctx.fillStyle = color;
+			ctx.fillRect(12, 2, 25, 40);
+			ctx.drawImage(images.playerNeutral, 0, 0);
+		})
+
+		$scope.updateProfile = function() {
+			var color = $("#picker").spectrum('get');
+			color = `rgb(${color._r}, ${color._g}, ${color._b})`;
+			$http.put('/api/users', {
+				name: $scope.userData.name,
+				color: color
+			})
+			.then(function(response) {
+				console.log(response);
+				$state.go('game.home')
+			})
+		}
+	}// end of profileController
 
 	function gameController(userData, authData, imageData, $rootScope, $scope, $http) {
 

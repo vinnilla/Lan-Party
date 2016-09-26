@@ -51,8 +51,22 @@ label {
 	text-align: left;
 }
 
+/*PROFILE*/
+#profile {
+	text-align: center;
+}
+#playerPreview {
+	margin: 50px auto;
+}
+.colorPicker, .colorPickerMenu {
+	background-color: white;
+}
+#profile button {
+	margin-top: 100px;
+}
+
 /*GAME COMMON*/
-#game {
+#game, #profile {
 	font-family: 'Press Start 2P', cursive;
 	position: relative;
 	margin: 0 auto;

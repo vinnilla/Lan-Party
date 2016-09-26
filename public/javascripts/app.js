@@ -33,6 +33,14 @@
 						requireLogout: true
 					}
 				})
+				.state('profile', {
+					url: '/profile',
+					controller: 'profileController',
+					templateUrl: 'views/profile.html',
+					data: {
+						requireLogin: true
+					}
+				})
 				.state('game', {
 					url: '/game',
 					controller: 'gameController',

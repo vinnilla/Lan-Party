@@ -1,0 +1,19 @@
+<div id="profile">
+	<h1>{{userData.name}}'s Profile</h1>
+	<canvas id="playerPreview"></canvas><br/>
+	<input type="text" id="picker" ng-model="color"/><br/>
+	<button ng-click="updateProfile()">Save</button>
+</div>
+
+<script>
+	$('#picker').spectrum({
+		preferredFormat: "rgb",
+		showInput: true,
+		// showAlpha: true,
+		showInitial: true,
+		showButtons: false, // hide cancel and choose buttons
+		containerClassName: 'colorPickerMenu',
+		replacerClassName: 'colorPicker',
+		color: 'white'
+	})
+</script>
