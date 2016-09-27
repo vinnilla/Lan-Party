@@ -1,5 +1,18 @@
 var mongoose = require('mongoose');
 
+var statSchema = new mongoose.Schema({
+	statName:String,
+	value:Number,
+	base:Number,
+	cost:Number,
+	tick:Number
+});
+
+var weaponSchema = new mongoose.Schema({
+	weaponName:String,
+	stats:[statSchema]
+});
+
 var userSchema = new mongoose.Schema({
 	name:String,
 	password_hash:String,
@@ -8,7 +21,8 @@ var userSchema = new mongoose.Schema({
 	class:{type: String, default: null},
 	color:{type:String, default: 'white'},
 	room:{type: String, default: null},
-	date:{type: Date, default: Date.now()}
+	date:{type: Date, default: Date.now()},
+	weapons:[weaponSchema]
 });
 
 module.exports = mongoose.model('User', userSchema);
