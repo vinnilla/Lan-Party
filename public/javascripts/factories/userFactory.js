@@ -188,7 +188,7 @@
 				// scale the zombie spawns
 				scaleID = setInterval(function() {
 					// console.info('scaling increases');
-					if (scaling < 5) {
+					if (scaling < 10) {
 						scaling += 0.1;
 						// console.log(scaling);
 					}
