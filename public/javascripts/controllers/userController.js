@@ -114,7 +114,6 @@
 			.then(function(response) {
 				// update player data with backend
 				$scope.player = response.data;
-				console.log($scope.player);
 				// update $scope.weapons
 				if ($scope.player.weapons) {
 					$scope.weapons.forEach(function(weapon, wIndex) {
@@ -126,7 +125,6 @@
 							})// end of inner for loop for stats
 						}
 					})// end of outer for loop for weapons
-					console.log($scope.weapons);
 				}
 			})
 		})

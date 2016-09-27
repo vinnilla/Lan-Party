@@ -50,9 +50,9 @@
 			// factory.team.forEach(function(player) {
 			// 	player.ready = false;
 			// })
-			console.log(factory.team);
+			// console.log(factory.team);
 			$rootScope.$broadcast('newPlayers');
-			console.log(factory.group);
+			// console.log(factory.group);
 			$state.transitionTo('game.start.lobby');
 		})
 
