@@ -2,10 +2,7 @@ var mongoose = require('mongoose');
 
 var statSchema = new mongoose.Schema({
 	statName:String,
-	value:Number,
-	base:Number,
-	cost:Number,
-	tick:Number
+	value:Number
 });
 
 var weaponSchema = new mongoose.Schema({

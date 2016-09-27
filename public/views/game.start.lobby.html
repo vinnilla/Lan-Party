@@ -4,12 +4,15 @@
 	<h4>PREPARE FOR BATTLE!</h4>
 	<div id="upgrade-menu">
 		<h5>Points to Spend: {{player.experience}}</h5><br/>
-		<div id="upgrade-options" ng-repeat="upgrade in upgrades">
-			<h5>{{upgrade.name}}:</h5>
-			<h6>{{upgrade.cost}} pts</h6><br/><br/>
-			<button ng-click="changeStat(upgrade.name, '-')"><</button>
-			<h6>{{upgrade.value}}</h6>
-			<button ng-click="changeStat(upgrade.name, '+')">></button>
+		<div id="weapons" ng-repeat="weapon in weapons">
+			<h4>{{weapon.weaponName}}</h4>
+			<div id="upgrade-options" ng-repeat="upgrade in weapon.stats">
+				<h5>{{upgrade.name}}:</h5>
+				<h6>{{upgrade.cost}} pts</h6><br/><br/>
+				<button ng-click="changeStat(upgrade.name, '-')"><</button>
+				<h6>{{upgrade.value}}</h6>
+				<button ng-click="changeStat(upgrade.name, '+')">></button>
+			</div>
 		</div>
 		<button id="ready-button" ng-click="updateStats()">READY</button>
 	</div>

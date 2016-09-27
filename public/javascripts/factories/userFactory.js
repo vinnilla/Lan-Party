@@ -176,7 +176,21 @@
 					factory.color = player.color;
 					player.alive = true;
 					player.score = 0;
-					player.bullets = player.stats['Clip Size'];
+
+
+					// CHANGE WHEN MORE WEAPONS ARE INCLUDED
+					player.weapons.forEach(function(weapon) {
+						if (weapon.weaponName === 'Pistol') {
+							weapon.stats.forEach(function(stat) {
+								if (stat.statName === 'Clip Size') {
+									player.bullets = stat.value;
+								}
+							})// end of inner for loop for stats
+						}
+					})// end of outer for loop for weapons
+
+
+
 					player.x = 50;
 					player.y = 500;
 					ctx.fillStyle = player.color;
@@ -385,15 +399,33 @@
 
 		socket.on('player-reload', function(reload) {
 			var playerIndex;
+			var clip;
+			var reloadSpeed;
 			factory.team.forEach(function(player, index) {
 				if(player.name === reload.player) {
 					playerIndex = index;
 				}
 			})
 			factory.team[playerIndex].bullets = "..."
+			// find the correct weapon and stats
+			factory.team[playerIndex].weapons.forEach(function(weapon) {
+				if (weapon.weaponName === 'Pistol') { // CHANGE WHEN MORE WEAPONS ARE ADDED
+					weapon.stats.forEach(function(stat) {
+						
+						if (stat.statName === 'Clip Size') {
+							clip = stat.value;
+						}
+						else if (stat.statName === 'Reload Speed') {
+							reloadSpeed = stat.value;
+						}
+
+					})// end of inner for loop for stats
+				}
+			})// end of outer for loop for weapons
+
 			setTimeout(function() {
-				factory.team[playerIndex].bullets = factory.team[playerIndex].stats['Clip Size'];
-			}, 2000-(factory.team[playerIndex].stats['Reload Speed']*200))
+				factory.team[playerIndex].bullets = clip;
+			}, 2000-(reloadSpeed*200))
 		})
 
 		socket.on('player-shoot', function(input) {

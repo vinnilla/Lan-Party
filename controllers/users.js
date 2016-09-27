@@ -42,6 +42,9 @@ function update(req, res) {
 			if (req.body.color) {
 				user.color = req.body.color;
 			}
+			if (req.body.weapons) {
+				user.weapons = req.body.weapons;
+			}
 			user.save(function(err, update) {
 				if (err) {
 					res.json({error: err});

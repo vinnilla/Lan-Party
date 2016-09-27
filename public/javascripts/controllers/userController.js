@@ -114,22 +114,20 @@
 			.then(function(response) {
 				// update player data with backend
 				$scope.player = response.data;
-				if ($scope.userData.team) {
-					$scope.userData.team.forEach(function(player) {
-						if ($scope.player.name === player.name) {
-							// update player stats
-							$scope.player.stats = player.stats;
+				console.log($scope.player);
+				// update $scope.weapons
+				if ($scope.player.weapons) {
+					$scope.weapons.forEach(function(weapon, wIndex) {
+						if (weapon.weaponName === 'Pistol') {
+							weapon.stats.forEach(function(stat, sIndex) {
+								stat.value = $scope.player.weapons[wIndex].stats[sIndex].value;
+								// subtract cost of weapons from exp
+								$scope.player.experience -= (stat.value-stat.base)*stat.cost;
+							})// end of inner for loop for stats
 						}
-					})// end of forEach
-					// update $scope.upgrades
-					if ($scope.player.stats) {
-						$scope.upgrades.forEach(function(stat) {
-							stat.value = $scope.player.stats[stat.name];
-							// subtract cost of upgrades from exp
-							$scope.player.experience -= (stat.value-stat.base)*stat.cost;
-						})
-					}
-				}// end of if team exists
+					})// end of outer for loop for weapons
+					console.log($scope.weapons);
+				}
 			})
 		})
 
@@ -137,36 +135,60 @@
 		$scope.authData = authData;
 		$scope.player = authData.user;
 
-		$scope.upgrades = [
+		$scope.weapons = [
+		{weaponName: 'Pistol', stats: [
 		{name: "Clip Size", value: 12, cost: 1000, base: 12, tick: 1},
 		{name: "Reload Speed", value: 1, cost: 10000, base: 1, tick: 1}
+		]}
 		];
+
 		$scope.changeStat = function(stat, type) {
-			$scope.upgrades.forEach(function(upgrade) {
-				if (upgrade.name === stat) {
-					if (type === '+' && $scope.player.experience-upgrade.cost > 0) {
-						upgrade.value += upgrade.tick;
-						changeEXP(-upgrade.cost);
-					}
-					else if (type === '-'){
-						if(upgrade.value-upgrade.tick >= upgrade.base) {
-							upgrade.value -= upgrade.tick;
-							changeEXP(upgrade.cost);
-						}
-					}
-				}
-			})
+			$scope.weapons.forEach(function(weapon) {
+
+				if (weapon.weaponName === 'Pistol') { // CHANGE WHEN MORE WEAPONS ARE ADDED
+
+					weapon.stats.forEach(function(upgrade) {
+						if (upgrade.name === stat) {
+							if (type === '+' && $scope.player.experience-upgrade.cost > 0) {
+								upgrade.value += upgrade.tick;
+								changeEXP(-upgrade.cost);
+							}
+							else if (type === '-'){
+								if(upgrade.value-upgrade.tick >= upgrade.base) {
+									upgrade.value -= upgrade.tick;
+									changeEXP(upgrade.cost);
+								}
+							}
+						}// end of upgrade.name === stat if
+					})// end of inner for loop (stats) 
+				}// end of weapon name match if statement
+			})// end of outer for loop (weapons)
 		}
+
 		$scope.updateStats = function() {
 			$scope.userData.team.forEach(function(player) {
 				if (player.name === $scope.player.name) {
-					player.stats = {};
-					$scope.upgrades.forEach(function(stat) {
-						player.stats[stat.name] = stat.value;
-					})
+					player.weapons = [];
+					$scope.weapons.forEach(function(weapon) {
+						var newWeapon = {}; // create weapon object that matches weaponSchema
+						newWeapon.weaponName = weapon.weaponName;
+						newWeapon.stats = [];
+						weapon.stats.forEach(function(stat) {
+							var newStat = {}; // create stat object that matches statSchema
+							newStat.statName = stat.name;
+							newStat.value = stat.value;
+							newWeapon.stats.push(newStat);
+						}) // end of inner for loop for stats
+						player.weapons.push(newWeapon);
+					}) // end of outer for loop for weapons
 					player.ready = true;
+					// send data to server io
 					$scope.userData.updatePlayer();
-					// $scope.$apply();
+					// send data to database
+					$http.put('/api/users', {
+						name: player.name,
+						weapons: player.weapons
+					})
 				}
 			})
 		}
@@ -209,8 +231,8 @@
 			// 	if (player.name === $scope.player.name) {
 			// 		console.log(player);
 			// 		$scope.player = player;
-			// 		$scope.upgrades.forEach(function(stat, index) {
-			// 			$scope.upgrades[index].value = player.stats[stat.name];
+			// 		$scope.weapons.forEach(function(stat, index) {
+			// 			$scope.weapons[index].value = player.stats[stat.name];
 			// 		})
 			// 	}
 			// })
