@@ -18,6 +18,15 @@ io.on('connection', function(socket) {
 		console.info(players);
 	})// end of on add-player
 
+	socket.on('updateColor', function(data) {
+		players.forEach(function(player) {
+			if (player.name === data.name) {
+				player.color = data.color;
+			}
+		})
+		player.color = data.color
+	})
+
 	socket.on('join-room', function(data, fn) {
 
 		function joinRoom() {

@@ -64,6 +64,13 @@ label {
 #profile button {
 	margin-top: 100px;
 }
+#profile #color {
+	display: none;
+}
+#profile p {
+	margin-top: 50px;
+	font-size: 10px;
+}
 
 /*GAME COMMON*/
 #game, #profile {
@@ -133,7 +140,7 @@ label {
 }
 #menu button {
 	display: block;
-	margin: 0 auto;
+	margin: 5vh auto 0 auto;
 	font-size: 1.5vw;
 }
 #menu button:hover {

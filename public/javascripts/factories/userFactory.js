@@ -473,7 +473,10 @@
 					ctx.fillRect(player.x+12, player.y+2, 25, 40);
 					ctx.drawImage(images.playerNeutral, player.x, player.y);
 					ctx.font = '24px serif';
+					// ctx.strokeStyle = 'white';
+					// ctx.lineWidth = 0.25;
 					ctx.fillText(player.bullets, player.x+10, player.y-8);
+					// ctx.strokeText(player.bullets, player.x+10, player.y-8);
 				}
 			})
 		}
@@ -481,7 +484,7 @@
 		function drawBullets() {
 			factory.bullets.forEach(function(bullet) {
 				ctx.fillStyle = bullet.color;
-				ctx.fillRect(bullet.x, bullet.y, 5, 3);
+				ctx.fillRect(bullet.x, bullet.y, 7, 3);
 			})
 		}
 

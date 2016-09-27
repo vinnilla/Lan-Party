@@ -9,12 +9,12 @@
 	function main(socket, $http, $state) {
 		var factory = {};
 
-		// generate random color
-		var r = Math.floor(Math.random()*155)+100;
-		var g = Math.floor(Math.random()*155)+100;
-		var b = Math.floor(Math.random()*155)+100;
+		// // generate random color
+		// var r = Math.floor(Math.random()*155)+100;
+		// var g = Math.floor(Math.random()*155)+100;
+		// var b = Math.floor(Math.random()*155)+100;
 		// var randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-		var randomColor = `rgb(${r},${g},${b})`;
+		// var randomColor = `rgb(${r},${g},${b})`;
 
 		// check server for all logged in users
 		socket.emit('check-players');
@@ -72,7 +72,7 @@
 						function addPlayer(player,token) {
 							// keep user data in factory
 							factory.user = player;
-							socket.emit('add-player', {name:player.name, socket: socket.id, class: player.class, exp: player.experience, color: randomColor, token: token})
+							socket.emit('add-player', {name:player.name, socket: socket.id, class: player.class, exp: player.experience, color: player.color, token: token})
 							// switch to game state
 							$state.transitionTo('game.home')
 						}

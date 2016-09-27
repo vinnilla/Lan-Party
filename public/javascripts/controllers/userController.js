@@ -9,7 +9,7 @@
 
 	mainController.$inject = ['userData', 'authData']
 	userController.$inject = ['userData', 'authData']
-	profileController.$inject = ['userData', 'imageData', '$scope', '$http', '$state']
+	profileController.$inject = ['userData', 'imageData', 'socketData', '$scope', '$http', '$state']
 	gameController.$inject = ['userData', 'authData', 'imageData', "$rootScope", "$scope", "$http"]
 
 	function mainController(userData, authData) {
@@ -54,18 +54,39 @@
 
 	}// end of userController
 
-	function profileController(userData, images, $scope, $http, $state) {
+	function profileController(userData, images, socket, $scope, $http, $state) {
+
 		$scope.userData = userData;
 		var canvas = document.getElementById('playerPreview');
 		var ctx = canvas.getContext('2d');
-		ctx.canvas.width = 50;
-		ctx.canvas.height = 50;
-		ctx.fillStyle = 'white';
-		ctx.fillRect(12, 2, 25, 40);
-		ctx.drawImage(images.playerNeutral, 0, 0);
+
+		$http.post('/api/user', {
+			name: $scope.userData.name
+		})
+		.then(function(response) {
+			$scope.color = response.data.color;
+			// set up color picker
+			$('#picker').spectrum({
+				preferredFormat: "rgb",
+				showInput: true,
+				// showAlpha: true,
+				showInitial: true,
+				showButtons: false, // hide cancel and choose buttons
+				containerClassName: 'colorPickerMenu',
+				replacerClassName: 'colorPicker',
+				color: $scope.color
+			})
+			// set up player preview
+			ctx.canvas.width = 50;
+			ctx.canvas.height = 50;
+			ctx.fillStyle = $scope.color;
+			ctx.fillRect(12, 2, 25, 40);
+			ctx.drawImage(images.playerNeutral, 0, 0);
+		})
+
+
 
 		$("#picker").on('dragstop.spectrum', function(e, color) {
-			console.log(color);
 			ctx.fillStyle = color;
 			ctx.fillRect(12, 2, 25, 40);
 			ctx.drawImage(images.playerNeutral, 0, 0);
@@ -73,13 +94,14 @@
 
 		$scope.updateProfile = function() {
 			var color = $("#picker").spectrum('get');
-			color = `rgb(${color._r}, ${color._g}, ${color._b})`;
+			color = `rgb(${Math.floor(color._r)}, ${Math.floor(color._g)}, ${Math.floor(color._b)})`;
 			$http.put('/api/users', {
 				name: $scope.userData.name,
 				color: color
 			})
 			.then(function(response) {
-				console.log(response);
+				// update server with new user color
+				socket.emit('updateColor', {name: $scope.userData.name, color: color});
 				$state.go('game.home')
 			})
 		}

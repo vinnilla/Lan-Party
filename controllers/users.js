@@ -77,7 +77,7 @@ function remove(req, res) {
 }
 
 function profile(req, res) {
-	User.findOne({id: req.token._id}, function(err, user) {
+	User.findOne({name: req.body.name}, function(err, user) {
 		if (err) {
 			res.json(err);
 		}
