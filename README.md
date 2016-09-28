@@ -3,7 +3,7 @@
 ![Lan Party Gameplay](http://i.imgur.com/uPlbL2h.png)
 
 ### A real-time co-op zombie survival shooter using socket.io
-#### Version: 0.1
+#### Version: 0.2
 
 
 ##### MEAN Stack:
@@ -14,7 +14,7 @@
 
 ##### Approach:
 Main landing page allows users to register or login to a pre-existing account.
-Once registered/logged in, the users are sent to the main game screen where they are presented with the option to start the game solo, or join a room to play cooperatively.
+Once registered/logged in, the users are sent to the main game screen where they are presented with the option to start the game solo, join a room to play cooperatively, or edit their profile (can choose a avatar color.)
 * If co-op is selected, users can type in the name of the room to join (if no room exists, a new room is created.) 
 * Only 4 players can play together.
 
@@ -27,7 +27,7 @@ Very little time was spent on styling the game menus and creating artwork. After
 * Sound
 
 ##### Game Design:
-The game progresses in waves until the player/team eventually succumbs to the neverending horde of zombies.
+The game progresses as an endless wave of zombies who slowly become faster (up to a maximum movement speed.) Difficulty will increase once special zombies are implemented.
 
 ###### Controls:
 Input | Action
@@ -52,6 +52,7 @@ Route | Description
 /#/welcome | landing page - option to register or login
 /#/register| registration form
 /#/login   | login form
+/#/profile | profile settings can be changed
 /#/game    | the shell page for the game (has the option and sound buttons in a 'header')
 /#/game/home    | game landing page - option to play solo or in a group
 /#/game/group   | enter the name of the group to join
@@ -79,9 +80,11 @@ password_hash | string | set on registration | authorization
 socket | string | set on login | connecting to socket on backend
 experience | number | default 0, updates with gameplay | track overall level of character
 class | string | default null, updates when class is selected | track character class
-color | string | default white, have yet to implement color selection | keep track of player color (currently randomized)
+color | string | default white, can be changed in profile menu | keep track of player color
 room | string | default null, updates when room is joined | track which users are in which rooms
 date | date | set on registration | track date and time account was made
+weapons | array of objects | default empty | keep track of every weapon upgrade across sessions
 
 ##### Known Bugs:
-Currently all squashed! :)
+Major: Currently all squashed! :)
+Minor: Latency issues can occur which may cause desync issues like teammates seemingly being killed on your screen but on their screen, they managed to kill the zombie before being eaten.
