@@ -353,7 +353,11 @@
 									if (player.x+25 > zombie.x+15 && player.x+25 < zombie.x+50 &&
 											player.y+25 > zombie.y && player.y+25 < zombie.y+50) {
 										factory.team[pIndex].alive = false;
-										document.removeEventListener('keydown', userInput)
+										// check if death belongs to local machine
+										console.log(factory.name, player.name);
+										if (factory.name === player.name) {
+											document.removeEventListener('keydown', userInput)
+										}
 									}
 								})
 							})
