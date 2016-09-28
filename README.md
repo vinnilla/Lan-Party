@@ -1,5 +1,7 @@
 #[LAN PARTY](http://lan-party.herokuapp.com "Lan Party")
 
+![Lan Party Gameplay](http://i.imgur.com/uPlbL2h.png)
+
 ### A real-time co-op zombie survival shooter using socket.io
 #### Version: 0.1
 
